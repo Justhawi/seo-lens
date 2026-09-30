@@ -3,7 +3,7 @@
 // GET /api/audit?url=... -> JSON audit (server-side fetch, so no CORS limits)
 
 import { PAGE } from "./page.js";
-import { runAudit } from "./audit.js";
+import { runAudit, fetchCoreWebVitals } from "./audit.js";
 
 const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), {
@@ -46,6 +46,16 @@ export default {
       try {
         const result = await runAudit(parsed.href);
         return json(result, result.ok ? 200 : 400);
+      } catch (e) {
+        return json({ ok: false, error: String((e && e.message) || e) }, 500);
+      }
+    }
+
+    if (url.pathname === "/api/cwv") {
+      const target = url.searchParams.get("url");
+      if (!target) return json({ ok: false, error: "Add a ?url= parameter." }, 400);
+      try {
+        return json(await fetchCoreWebVitals(target));
       } catch (e) {
         return json({ ok: false, error: String((e && e.message) || e) }, 500);
       }

@@ -160,6 +160,7 @@ form.addEventListener('submit',async e=>{
   }
   render(data);
   go.disabled=false;go.textContent='Run audit';
+  loadCwv(url);
   document.getElementById('stamp').textContent='last run '+new Date().toLocaleString();
 });
 
@@ -281,6 +282,52 @@ function render(d){
 
   out.appendChild(tally());
   out.appendChild(body);
+}
+
+
+async function loadCwv(url){
+  const sk=sec('Speed (Core Web Vitals)');
+  const holder=el('div');
+  sk.appendChild(holder);
+  row(holder,'info','Measuring','','Running Google PageSpeed Insights on mobile. Takes 15 to 40 seconds.');
+  out.appendChild(sk);
+  let d;
+  try{
+    const r=await fetch('/api/cwv?url='+encodeURIComponent(url));
+    d=await r.json();
+  }catch(e){
+    holder.textContent='';
+    row(holder,'info','Speed check failed','',e.message);
+    return;
+  }
+  holder.textContent='';
+  if(!d.ok){ row(holder,'info','Speed check unavailable','',d.error||''); refreshTally(); return; }
+  const g=c=>c==='FAST'?'pass':(c==='AVERAGE'?'warn':'critical');
+  if(d.score!=null){
+    row(holder,d.score>=90?'pass':(d.score>=50?'warn':'critical'),'Performance score',d.score+'/100','Lighthouse lab run, mobile.');
+  }
+  if(d.field){
+    if(d.field.lcp)row(holder,g(d.field.lcp.category),'LCP, real users',d.field.lcp.value.toFixed(2)+' s','Largest Contentful Paint across real Chrome visitors. Good is under 2.5 s.');
+    if(d.field.inp)row(holder,g(d.field.inp.category),'INP, real users',Math.round(d.field.inp.value)+' ms','Interaction to Next Paint. Good is under 200 ms.');
+    if(d.field.cls)row(holder,g(d.field.cls.category),'CLS, real users',d.field.cls.value.toFixed(3),'Cumulative Layout Shift. Good is under 0.1.');
+  }else{
+    row(holder,'info','No real-user data','','Google has not collected enough Chrome traffic for this URL, so only the lab run below is available.');
+  }
+  const L=d.lab||{};
+  if(L.lcp!=null)row(holder,L.lcp<=2500?'pass':(L.lcp<=4000?'warn':'critical'),'LCP, lab',(L.lcp/1000).toFixed(2)+' s');
+  if(L.cls!=null)row(holder,L.cls<=0.1?'pass':(L.cls<=0.25?'warn':'critical'),'CLS, lab',L.cls.toFixed(3));
+  if(L.tbt!=null)row(holder,L.tbt<=200?'pass':(L.tbt<=600?'warn':'critical'),'Total blocking time',Math.round(L.tbt)+' ms');
+  if(L.fcp!=null)row(holder,'info','First contentful paint',(L.fcp/1000).toFixed(2)+' s');
+  refreshTally();
+}
+
+function refreshTally(){
+  const t=document.querySelector('.tally');
+  if(!t)return;
+  const n=s=>findings.filter(f=>f.status===s).length;
+  t.children[0].textContent=n('critical')+' critical';
+  t.children[1].textContent=n('warn')+' warnings';
+  t.children[2].textContent=n('pass')+' pass';
 }
 
 // Deep link: /?url=example.com runs immediately, so a report can be shared.

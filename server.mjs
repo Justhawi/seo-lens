@@ -4,7 +4,7 @@
 
 import http from "node:http";
 import { PAGE } from "./page.js";
-import { runAudit } from "./audit.js";
+import { runAudit, fetchCoreWebVitals } from "./audit.js";
 
 const PORT = process.env.PORT || 8787;
 
@@ -43,6 +43,23 @@ http
       try {
         const result = await runAudit(parsed.href);
         return send(result, result.ok ? 200 : 400);
+      } catch (e) {
+        return send({ ok: false, error: String(e.message || e) }, 500);
+      }
+    }
+
+    if (url.pathname === "/api/cwv") {
+      const target = url.searchParams.get("url");
+      const send = (obj, status = 200) => {
+        res.writeHead(status, {
+          "content-type": "application/json; charset=utf-8",
+          "cache-control": "no-store",
+        });
+        res.end(JSON.stringify(obj));
+      };
+      if (!target) return send({ ok: false, error: "Add a ?url= parameter." }, 400);
+      try {
+        return send(await fetchCoreWebVitals(target));
       } catch (e) {
         return send({ ok: false, error: String(e.message || e) }, 500);
       }

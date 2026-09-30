@@ -412,3 +412,63 @@ export async function runAudit(rawUrl, fetchImpl = fetch) {
     robots,
   };
 }
+
+// ---------------------------------------------------------------- Core Web Vitals
+// Google's PageSpeed Insights API. Free, no key, rate-limited per IP.
+// Field data (real Chrome users) is used when Google has enough traffic for the
+// URL; otherwise only the lab run is reported, and the two are labelled apart.
+export async function fetchCoreWebVitals(rawUrl, fetchImpl = fetch) {
+  let target;
+  try {
+    target = new URL(/^https?:\/\//i.test(rawUrl) ? rawUrl : 'https://' + rawUrl);
+  } catch (e) {
+    return { error: "That doesn't look like a valid URL." };
+  }
+  const api =
+    'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=' +
+    encodeURIComponent(target.href) +
+    '&strategy=mobile&category=performance';
+  let j;
+  try {
+    const r = await fetchImpl(api);
+    if (!r.ok) {
+      return { error: 'PageSpeed API returned ' + r.status + '. It rate-limits by IP; try again shortly.' };
+    }
+    j = await r.json();
+  } catch (e) {
+    return { error: 'Could not reach the PageSpeed API: ' + (e.message || e) };
+  }
+  const lh = j.lighthouseResult || {};
+  const audits = lh.audits || {};
+  const num = (k) =>
+    audits[k] && typeof audits[k].numericValue === 'number' ? audits[k].numericValue : null;
+  const score =
+    lh.categories && lh.categories.performance && typeof lh.categories.performance.score === 'number'
+      ? Math.round(lh.categories.performance.score * 100)
+      : null;
+  let field = null;
+  const m = j.loadingExperience && j.loadingExperience.metrics;
+  if (m) {
+    field = {};
+    if (m.LARGEST_CONTENTFUL_PAINT_MS)
+      field.lcp = { value: m.LARGEST_CONTENTFUL_PAINT_MS.percentile / 1000, category: m.LARGEST_CONTENTFUL_PAINT_MS.category };
+    if (m.CUMULATIVE_LAYOUT_SHIFT_SCORE)
+      field.cls = { value: m.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile / 100, category: m.CUMULATIVE_LAYOUT_SHIFT_SCORE.category };
+    if (m.INTERACTION_TO_NEXT_PAINT)
+      field.inp = { value: m.INTERACTION_TO_NEXT_PAINT.percentile, category: m.INTERACTION_TO_NEXT_PAINT.category };
+    if (!Object.keys(field).length) field = null;
+  }
+  return {
+    ok: true,
+    score,
+    strategy: 'mobile',
+    lab: {
+      lcp: num('largest-contentful-paint'),
+      cls: num('cumulative-layout-shift'),
+      tbt: num('total-blocking-time'),
+      fcp: num('first-contentful-paint'),
+      si: num('speed-index'),
+    },
+    field,
+  };
+}
