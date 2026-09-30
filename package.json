@@ -1,0 +1,15 @@
+{
+  "name": "seo-lens",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Audit any page's on-page SEO and detect cloaking. Runs as a plain Node server or a Cloudflare Worker.",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node test.mjs",
+    "deploy:cf": "wrangler deploy"
+  }
+}
