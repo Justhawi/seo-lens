@@ -1,7 +1,9 @@
 export const PAGE = `<!doctype html>
-<html lang="es">
+<html lang="es" data-auth="0">
 <head>
 <meta charset="utf-8">
+<meta name="google" content="notranslate">
+<meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SEO Lens · Petplan</title>
 <meta name="description" content="Audita cualquier URL y comprueba si esa página muestra a Google algo distinto de lo que ves tú.">
@@ -229,6 +231,38 @@ letter-spacing:.03em;cursor:pointer;line-height:1}
 .lang.on{background:#fff;color:var(--pp-blue)}
 .lang .flag{display:block;width:20px;height:14px;border-radius:2px;flex:none}
 @media (max-width:520px){.lang .code{display:none}.lang{padding:0 7px}}
+
+.ask-panel{position:fixed;right:20px;bottom:72px;z-index:35;width:min(392px,calc(100vw - 40px));
+max-height:min(560px,70vh);display:flex;flex-direction:column;background:var(--surface-1);
+border:1px solid var(--border);border-radius:8px;box-shadow:0 12px 40px rgba(0,48,87,.26);overflow:hidden}
+.ask-panel[hidden]{display:none}
+.ask-head{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.ask-head h2{margin:0;font-family:var(--font-display);font-weight:400;font-size:16.5px;color:var(--brand)}
+.ask-head p{margin:2px 0 0;font-size:12.5px;color:var(--text-secondary)}
+.ask-close{margin-left:auto;flex:none;width:28px;height:28px;border:0;background:transparent;
+color:var(--text-muted);font:inherit;font-size:19px;line-height:1;cursor:pointer;border-radius:4px}
+.ask-close:hover{background:var(--surface-2);color:var(--text-primary)}
+.ask-body{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.ask-msg{max-width:92%}
+.ask-msg p{margin:0;padding:10px 13px;border-radius:10px;font-size:13.5px;line-height:1.5}
+.ask-msg.bot{align-self:flex-start}
+.ask-msg.bot p{background:var(--surface-2);color:var(--text-primary);border-bottom-left-radius:3px}
+.ask-msg.me{align-self:flex-end}
+.ask-msg.me p{background:var(--pp-blue);color:#fff;border-bottom-right-radius:3px}
+.ask-chips{display:flex;flex-wrap:wrap;gap:6px}
+.ask-chip{background:var(--surface-1);border:1px solid var(--border-strong);border-radius:999px;
+padding:6px 12px;font:inherit;font-size:12.5px;color:var(--text-secondary);cursor:pointer;text-align:left}
+.ask-chip:hover{background:var(--surface-2);color:var(--text-primary)}
+.ask-form{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border)}
+.ask-form input{flex:1;min-width:0;padding:9px 12px;font:inherit;font-size:13.5px;color:var(--text-primary);
+background:var(--surface-1);border:1px solid var(--border-strong);border-radius:var(--radius)}
+.ask-form input:focus{outline:0;border-color:var(--pp-blue);box-shadow:0 0 0 3px var(--brand-soft)}
+.ask-form button{flex:none;padding:9px 16px;font:inherit;font-size:13.5px;font-weight:bold;color:#fff;
+background:var(--pp-blue);border:0;border-radius:var(--radius);cursor:pointer}
+.ask-form button:hover{background:var(--pp-blue-dark)}
+.acctmenu a.item{text-decoration:none}
+html:not([data-auth="1"]) .needauth{display:none}
+@media (max-width:520px){.ask-panel{right:10px;left:10px;width:auto;bottom:66px}}
 </style>
 </head>
 <body>
@@ -258,6 +292,7 @@ letter-spacing:.03em;cursor:pointer;line-height:1}
 <div class="acctmenu" id="acctmenu" role="menu" hidden>
   <div class="who"><span class="name">Petplan Ib&eacute;rica SL</span><span class="sub" data-t="acctSub"></span></div>
   <button class="item" type="button" id="acctGuide" role="menuitem"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2z"/></svg><span data-t="navGuide"></span></button>
+  <a class="item needauth" href="/logout" role="menuitem"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3z"/><path fill="currentColor" d="M17 8l-1.4 1.4L17.2 11H9v2h8.2l-1.6 1.6L17 16l4-4-4-4z"/></svg><span data-t="logout"></span></a>
 </div>
 </div>
 </span>
@@ -302,9 +337,22 @@ letter-spacing:.03em;cursor:pointer;line-height:1}
 </div>
 </div>
 
-<button class="help" id="help" type="button"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 2.3 1.2 4.4 3.2 5.8V21l3.9-2.3c.9.2 1.9.3 2.9.3 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg><span data-t="help"></span></button>
+<section class="ask-panel" id="askPanel" role="dialog" aria-modal="false" hidden>
+  <header class="ask-head">
+    <div><h2 data-t="askTitle"></h2><p data-t="askSub"></p></div>
+    <button class="ask-close" id="askClose" type="button" data-ta="askClose">&times;</button>
+  </header>
+  <div class="ask-body" id="askBody" aria-live="polite"></div>
+  <form class="ask-form" id="askForm" autocomplete="off">
+    <input id="askInput" type="text" data-tp="askPlaceholder" data-ta="askPlaceholder">
+    <button type="submit" data-t="askSend"></button>
+  </form>
+</section>
+
+<button class="help" id="help" type="button" aria-haspopup="dialog" aria-expanded="false"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M12 3C6.5 3 2 6.6 2 11c0 2.3 1.2 4.4 3.2 5.8V21l3.9-2.3c.9.2 1.9.3 2.9.3 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg><span data-t="help"></span></button>
 
 <script>
+
 const I18N={
 es:{
 licence:"Licencia: Petplan Ibérica SL",navAudit:"Auditar",navGuide:"Guía",
@@ -369,7 +417,9 @@ noFieldData:"Sin datos de usuarios reales",
 noFieldNote:"Google no tiene tráfico de Chrome suficiente para esta URL, así que sólo hay datos de laboratorio.",
 lcpLab:"LCP, laboratorio",clsLab:"CLS, laboratorio",tbt:"Tiempo total de bloqueo",fcp:"First contentful paint",
 zero:"ninguno",docTitle:"SEO Lens · Auditoría · Petplan",
-account:"Cuenta",acctSub:"SEO Lens · auditoría on-page"
+account:"Cuenta",acctSub:"SEO Lens · auditoría on-page",logout:"Cerrar sesión",
+askTitle:"Asistente",askSub:"Responde sobre esta auditoría y sobre cómo usar la herramienta.",
+askClose:"Cerrar",askPlaceholder:"Escribe tu pregunta",askSend:"Enviar"
 },
 en:{
 licence:"Licence: Petplan Ibérica SL",navAudit:"Audit",navGuide:"Guide",
@@ -434,7 +484,9 @@ noFieldData:"No real-user data",
 noFieldNote:"Google does not have enough Chrome traffic for this URL, so only lab data is available.",
 lcpLab:"LCP, lab",clsLab:"CLS, lab",tbt:"Total blocking time",fcp:"First contentful paint",
 zero:"none",docTitle:"SEO Lens · Audit · Petplan",
-account:"Account",acctSub:"SEO Lens · on-page audit"
+account:"Account",acctSub:"SEO Lens · on-page audit",logout:"Log out",
+askTitle:"Assistant",askSub:"Answers about this audit and about using the tool.",
+askClose:"Close",askPlaceholder:"Type your question",askSend:"Send"
 }};
 
 let LANG='es';
@@ -472,6 +524,7 @@ try{const t=localStorage.getItem('seolens-theme');if(t)document.documentElement.
 function applyStatic(){
   document.documentElement.lang=LANG;
   for(const n of document.querySelectorAll('[data-t]'))n.textContent=T(n.getAttribute('data-t'));
+  for(const n of document.querySelectorAll('[data-tp]'))n.placeholder=T(n.getAttribute('data-tp'));
   for(const n of document.querySelectorAll('[data-ta]')){
     const s=T(n.getAttribute('data-ta'));
     n.setAttribute('aria-label',s);
@@ -488,6 +541,7 @@ function setLang(code){
   try{localStorage.setItem('seolens-lang',code)}catch(e){}
   applyStatic();
   redraw();
+  if(typeof askBody!=='undefined'&&askBody.childElementCount)askReset();
 }
 for(const b of document.querySelectorAll('.lang'))
   b.addEventListener('click',()=>setLang(b.getAttribute('data-lang')));
@@ -506,7 +560,6 @@ function focusAudit(){
 document.getElementById('navGuide').addEventListener('click',focusGuide);
 document.getElementById('guideBtn').addEventListener('click',focusGuide);
 document.getElementById('acctGuide').addEventListener('click',focusGuide);
-document.getElementById('help').addEventListener('click',focusGuide);
 document.getElementById('navAudit').addEventListener('click',focusAudit);
 
 const acctBtn=document.getElementById('acct'),acctMenu=document.getElementById('acctmenu');
@@ -771,6 +824,307 @@ function fillCwv(holder,d){
 }
 
 applyStatic();
+
+/* ---- Asistente -----------------------------------------------------------
+   Answers from this tool's own knowledge and from the audit currently on
+   screen. No model behind it: every figure it quotes is read out of the
+   result JSON, so it cannot invent a finding that is not there.
+   Keyword fields stay unaccented because norm() strips accents first.     */
+
+const askPanel=document.getElementById('askPanel');
+const askBody=document.getElementById('askBody');
+const askForm=document.getElementById('askForm');
+const askInput=document.getElementById('askInput');
+
+function norm(s){return String(s||'').toLowerCase()
+  .normalize('NFD').replace(/[̀-ͯ]/g,'')
+  .replace(/[^a-z0-9 ]/g,' ').replace(/\\s+/g,' ').trim()}
+
+function sev(){return {c:n('critical'),w:n('warn'),p:n('pass')}}
+function noData(){return LANG==='es'
+  ? 'Audita primero una URL y te respondo con los datos reales de esa página.'
+  : 'Run an audit on a URL first and I will answer using that page’s real figures.'}
+
+// k = ordinary keywords, s = decisive phrases worth far more.
+const TOPICS=[
+{id:'what',k:'que comprueba comprueban mide herramienta sirve what does this tool check measure',
+ s:'que comprueba,que hace esta,para que sirve,what does this tool,what does it check',
+ a:()=>LANG==='es'
+  ?'Descarga la página dos veces desde el mismo servidor, una identificándose como navegador y otra como Googlebot, y compara título, meta description y tamaño del texto. Si no coinciden, hay cloaking. Además audita canonical, hreflang, Open Graph, encabezados, texto alternativo, datos estructurados, robots.txt, rastreadores de IA, densidad de términos y Core Web Vitals.'
+  :'It downloads the page twice from the same server, once identifying as a browser and once as Googlebot, then compares title, meta description and text size. A mismatch means cloaking. It also audits canonical, hreflang, Open Graph, headings, alt text, structured data, robots.txt, AI crawlers, term density and Core Web Vitals.'},
+
+{id:'cloaking',k:'cloaking encubrimiento googlebot oculto invisible inyectado hacked comprometido',
+ s:'cloaking,que ve google,contenido distinto,different content,compromised,hackeado',
+ a:d=>{
+  if(!d)return (LANG==='es'
+   ?'Cloaking es servir a Googlebot algo distinto de lo que ve una persona. Es la firma habitual de un sitio comprometido: las páginas se ven normales para ti mientras Google indexa spam. '
+   :'Cloaking is serving Googlebot something different from what a person sees. It is the usual signature of a compromised site: pages look normal to you while Google indexes spam. ')+noData();
+  const c=d.cloaking;
+  if(c&&c.suspicious){
+   const bt=(c.asBrowser.title||'').slice(0,60),gt=(c.asGooglebot.title||'').slice(0,60);
+   return LANG==='es'
+    ?'Sí, esta URL hace cloaking. Tu navegador recibe el título «'+bt+'» y Googlebot recibe «'+gt+'». Google indexa lo segundo. Esto casi siempre significa que el servidor está comprometido: avisa al hosting y revisa Search Console antes de tocar nada.'
+    :'Yes, this URL is cloaking. Your browser gets the title «'+bt+'» and Googlebot gets «'+gt+'». Google indexes the second one. This almost always means the server is compromised: tell the host and check Search Console before changing anything.';
+  }
+  if(c&&c.error)return LANG==='es'?'No se pudo comparar: '+c.error:'The comparison failed: '+c.error;
+  return LANG==='es'
+   ?'No. En esta URL Googlebot y un navegador reciben el mismo título, la misma descripción y un tamaño de texto equivalente.'
+   :'No. On this URL Googlebot and a browser receive the same title, the same description and an equivalent text size.'}},
+
+{id:'verdict',k:'resultado veredicto resumen result verdict summary',
+ s:'el resultado,resumen,como esta mi,que tal esta,the result,summary,how did my page',
+ a:d=>{
+  if(!d)return noData();
+  const s=sev(),p=d.page;
+  const head=d.cloaking&&d.cloaking.suspicious
+   ?(LANG==='es'?'Hay cloaking, y eso manda sobre todo lo demás. ':'There is cloaking, and that outranks everything else. ')
+   :(LANG==='es'?'Sin cloaking. ':'No cloaking. ');
+  return head+(LANG==='es'
+   ?p.host+' tiene '+s.c+' puntos críticos, '+s.w+' avisos y '+s.p+' correctos, sobre '+p.wordCount+' palabras.'
+   :p.host+' has '+s.c+' critical points, '+s.w+' warnings and '+s.p+' passing, over '+p.wordCount+' words.')}},
+
+{id:'first',k:'primero prioridad urgente first priority start',
+ s:'que arreglo,por donde empiezo,que corrijo,mas urgente,what should i fix,fix first,where do i start',
+ a:d=>{
+  if(!d)return noData();
+  const items=[],p=d.page;
+  if(d.cloaking&&d.cloaking.suspicious)items.push(LANG==='es'?'el cloaking':'the cloaking');
+  if(d.cloaking&&d.cloaking.botSpam&&d.cloaking.botSpam.length)items.push(LANG==='es'?'los términos de spam servidos a Googlebot':'the spam terms served to Googlebot');
+  if(!p.viewport)items.push(LANG==='es'?'el viewport ausente':'the missing viewport');
+  if(p.titleLength===0)items.push(LANG==='es'?'el title vacío':'the empty title');
+  if(!p.canonical)items.push(LANG==='es'?'la etiqueta canonical':'the canonical tag');
+  if(p.wordCount<300)items.push(LANG==='es'?'el contenido escaso':'the thin content');
+  if(!items.length)return LANG==='es'
+   ?'Nada crítico. Los avisos que quedan ('+sev().w+') son mejoras, no urgencias.'
+   :'Nothing critical. The '+sev().w+' remaining warnings are improvements, not emergencies.';
+  return (LANG==='es'?'Por este orden: ':'In this order: ')+items.join(LANG==='es'?', luego ':', then ')+'.'}},
+
+{id:'title',k:'title titulo caracteres largo corto length',
+ s:'el title,el titulo,the title',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Un title útil va entre 30 y 65 caracteres: por debajo desaprovecha espacio, por encima Google lo corta en resultados. '
+   :'A useful title runs 30 to 65 characters: below that it wastes space, above it Google truncates it in results. ';
+  if(!d)return g+noData();
+  return g+(LANG==='es'
+   ?'El de esta página tiene '+d.page.titleLength+': «'+(d.page.title||'')+'».'
+   :'This page’s is '+d.page.titleLength+': «'+(d.page.title||'')+'».')}},
+
+{id:'desc',k:'description descripcion snippet',
+ s:'meta description,la descripcion,the description',
+ a:d=>{
+  const g=LANG==='es'
+   ?'La meta description no posiciona, pero decide cuánta gente hace clic. El rango que sobrevive sin recortes es 120 a 160 caracteres. '
+   :'The meta description does not rank, but it decides how many people click. The range that survives without truncation is 120 to 160 characters. ';
+  if(!d)return g+noData();
+  return g+(LANG==='es'?'Aquí tiene '+d.page.descriptionLength+'.':'Here it is '+d.page.descriptionLength+'.')}},
+
+{id:'canonical',k:'canonical duplicado duplicate preferida',
+ s:'canonical,duplicado,duplicate',
+ a:d=>{
+  const g=LANG==='es'
+   ?'El canonical le dice a Google cuál es la versión buena de una página que existe en varias URLs. Lo normal es que apunte a sí misma. '
+   :'The canonical tells Google which version of a page is the real one when it exists at several URLs. Normally it points at itself. ';
+  if(!d)return g+noData();
+  const p=d.page;
+  if(!p.canonical)return g+(LANG==='es'?'Esta página no lleva ninguna.':'This page has none.');
+  return g+(LANG==='es'
+   ?(p.canonicalSelf?'La de esta página es autorreferencial, que es lo correcto.':'La de esta página apunta a otra URL: '+p.canonical+'. Compruébalo, porque así le pides a Google que no indexe esta.')
+   :(p.canonicalSelf?'This page’s is self-referencing, which is right.':'This page’s points elsewhere: '+p.canonical+'. Check it, because that asks Google not to index this one.'))}},
+
+{id:'hreflang',k:'hreflang xdefault internacional',
+ s:'hreflang,x default,varios idiomas,language versions',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Hreflang indica qué versión de idioma servir a cada usuario. Sin x-default, Google elige por su cuenta para quien no encaje en ninguno. '
+   :'Hreflang says which language version to serve each user. Without x-default, Google picks on its own for anyone who fits none of them. ';
+  if(!d)return g+noData();
+  const p=d.page;
+  if(!p.hreflangs.length)return g+(LANG==='es'?'Esta página no declara ninguno.':'This page declares none.');
+  return g+(LANG==='es'
+   ?'Aquí hay '+p.hreflangs.length+' ('+p.hreflangs.join(', ')+')'+(p.hasXDefault?' y sí hay x-default.':' y falta el x-default.')
+   :'Here there are '+p.hreflangs.length+' ('+p.hreflangs.join(', ')+')'+(p.hasXDefault?' and x-default is present.':' and x-default is missing.'))}},
+
+{id:'alt',k:'alt imagenes imagen alternativo accesibilidad images accessibility decorativa',
+ s:'texto alternativo,alt text,las imagenes,the images,alt',
+ a:d=>{
+  const g=LANG==='es'
+   ?'El alt describe la imagen a quien no la ve, lector de pantalla o buscador. alt="" es válido sólo si la imagen es decorativa; una imagen sin atributo alt es un fallo. '
+   :'Alt text describes the image to anyone who cannot see it, screen reader or search engine. alt="" is valid only for decorative images; an image with no alt attribute is a defect. ';
+  if(!d)return g+noData();
+  const i=d.page.images;
+  return g+(LANG==='es'
+   ?'Aquí '+i.meaningfulAlt+' de '+i.total+' están descritas: '+i.emptyAlt+' llevan alt vacío y '+i.missingAltAttr+' no tienen el atributo.'
+   :'Here '+i.meaningfulAlt+' of '+i.total+' are described: '+i.emptyAlt+' carry an empty alt and '+i.missingAltAttr+' have no attribute at all.')}},
+
+{id:'schema',k:'schema json ld marcado rich',
+ s:'datos estructurados,structured data,schema,json ld,resultados enriquecidos,rich results',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Los datos estructurados (JSON-LD) explican a Google qué es cada cosa de la página, y son lo que habilita resultados enriquecidos. Para un seguro, Product, FAQPage y Organization son los habituales. '
+   :'Structured data (JSON-LD) tells Google what each thing on the page is, and it is what enables rich results. For insurance, Product, FAQPage and Organization are the usual ones. ';
+  if(!d)return g+noData();
+  const t=d.page.schemaTypes;
+  return g+(t.length
+   ?(LANG==='es'?'Aquí hay '+t.length+': '+t.join(', ')+'.':'Here there are '+t.length+': '+t.join(', ')+'.')
+   :(LANG==='es'?'Esta página no lleva ninguno.':'This page has none.'))}},
+
+{id:'robots',k:'robots sitemap rastreo indexacion crawl',
+ s:'robots txt,robots,sitemap,mapa del sitio',
+ a:d=>{
+  const g=LANG==='es'
+   ?'robots.txt marca por dónde pueden pasar los rastreadores y dónde está el sitemap. '
+   :'robots.txt sets where crawlers may go and where the sitemap lives. ';
+  if(!d)return g+noData();
+  const rb=d.robots;
+  if(!rb||!rb.reachable)return g+(LANG==='es'?'El de este dominio no es accesible.':'This domain’s is not reachable.');
+  return g+(LANG==='es'
+   ?'El de aquí responde y declara '+rb.sitemaps.length+' sitemap(s).'
+   :'This one responds and declares '+rb.sitemaps.length+' sitemap(s).')}},
+
+{id:'ai',k:'gptbot chatgpt claude perplexity extended llm bots',
+ s:'rastreadores de ia,inteligencia artificial,ai crawlers,gptbot,chatgpt',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Los rastreadores de IA (GPTBot, ClaudeBot, PerplexityBot, Google-Extended) se controlan desde robots.txt. Bloquearlos te saca de las respuestas generadas; permitirlos te deja aparecer en ellas. Es una decisión de negocio, no un fallo técnico. '
+   :'AI crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended) are controlled from robots.txt. Blocking them keeps you out of generated answers; allowing them lets you appear in them. It is a business decision, not a technical defect. ';
+  if(!d||!d.robots||!d.robots.reachable)return g+noData();
+  const blocked=Object.entries(d.robots.aiCrawlers).filter(([,v])=>v==='blocked').map(([k])=>k);
+  return g+(blocked.length
+   ?(LANG==='es'?'Aquí están bloqueados: '+blocked.join(', ')+'.':'Here these are blocked: '+blocked.join(', ')+'.')
+   :(LANG==='es'?'Aquí no hay ninguno bloqueado.':'None are blocked here.'))}},
+
+{id:'cwv',k:'velocidad rendimiento lcp inp cls lento speed performance slow puntuacion',
+ s:'core web vitals,web vitals,la velocidad,how fast,lcp,inp,cls',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Core Web Vitals mide la experiencia real: LCP es cuánto tarda en pintarse lo principal (bien por debajo de 2,5 s), INP la respuesta al tocar algo (por debajo de 200 ms) y CLS cuánto salta el diseño (por debajo de 0,1). '
+   :'Core Web Vitals measures the real experience: LCP is how long the main content takes to paint (good below 2.5 s), INP the response when you interact (below 200 ms) and CLS how much the layout jumps (below 0.1). ';
+  if(!lastCwv)return g+(LANG==='es'?'Aún no hay medición para esta página.':'There is no measurement for this page yet.');
+  if(!lastCwv.ok)return g+(LANG==='es'
+   ?'La medición no está disponible ahora mismo ('+(lastCwv.error||lastCwv.threw||'')+'). Requiere una clave de PageSpeed Insights.'
+   :'The measurement is unavailable right now ('+(lastCwv.error||lastCwv.threw||'')+'). It needs a PageSpeed Insights key.');
+  const parts=[],f=lastCwv.field||{};
+  if(lastCwv.score!=null)parts.push((LANG==='es'?'puntuación ':'score ')+lastCwv.score+'/100');
+  if(f.lcp)parts.push('LCP '+fx(f.lcp.value,2)+' s');
+  if(f.inp)parts.push('INP '+Math.round(f.inp.value)+' ms');
+  if(f.cls)parts.push('CLS '+fx(f.cls.value,3));
+  return g+(LANG==='es'?'Aquí: ':'Here: ')+parts.join(', ')+'.'}},
+
+{id:'words',k:'palabras escaso thin length',
+ s:'numero de palabras,cuantas palabras,contenido escaso,word count,thin content',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Por debajo de unas 300 palabras una página rara vez tiene material suficiente para posicionar por nada competitivo. El número no es un objetivo en sí: es una señal de si la página responde de verdad a la intención. '
+   :'Below roughly 300 words a page rarely has enough material to rank for anything competitive. The number is not a target in itself: it is a signal of whether the page genuinely answers the intent. ';
+  if(!d)return g+noData();
+  return g+(LANG==='es'?'Ésta tiene '+d.page.wordCount+'.':'This one has '+d.page.wordCount+'.')}},
+
+{id:'security',k:'hsts headers powered servidor version',
+ s:'cabeceras de seguridad,security headers,cabeceras',
+ a:d=>{
+  const g=LANG==='es'
+   ?'Las cabeceras de seguridad no afectan al posicionamiento, pero un sitio de seguros que expone la versión del servidor le está dando pistas a quien busque vulnerabilidades conocidas. '
+   :'Security headers do not affect ranking, but an insurance site that advertises its server version is handing clues to anyone hunting for known vulnerabilities. ';
+  if(!d)return g+noData();
+  const sh=d.page.securityHeaders||{};
+  const miss=['strict-transport-security','x-content-type-options','referrer-policy'].filter(h=>!sh[h]);
+  return g+(miss.length
+   ?(LANG==='es'?'Aquí faltan: '+miss.join(', ')+'.':'Missing here: '+miss.join(', ')+'.')
+   :(LANG==='es'?'Aquí están las tres.':'All three are present here.'))}},
+
+{id:'keywords',k:'terminos densidad frecuentes',
+ s:'palabras clave,densidad,keywords,term density,most frequent',
+ a:d=>{
+  const g=LANG==='es'
+   ?'La densidad de términos no es un factor de posicionamiento, pero si el término por el que quieres posicionar no aparece entre los más frecuentes, la página probablemente no trata de lo que crees. '
+   :'Term density is not a ranking factor, but if the term you want to rank for is not among the most frequent, the page probably is not about what you think it is. ';
+  if(!d||!d.page.topKeywords.length)return g+noData();
+  const top=d.page.topKeywords.slice(0,5).map(k=>k.word+' ('+k.density+'%)');
+  return g+(LANG==='es'?'Aquí los cinco primeros son: ':'The top five here are: ')+top.join(', ')+'.'}},
+
+{id:'privacy',k:'privacidad guarda almacena rgpd gdpr stored save memoria',
+ s:'mis datos,con mis datos,se guarda,se almacena,privacidad,my data,is anything stored,data privacy',
+ a:()=>LANG==='es'
+  ?'No se guarda nada. Cada análisis descarga la página en memoria, la compara y devuelve el resultado; no hay base de datos, ni historial, ni envío a terceros. Lo único que queda en tu navegador es el idioma y el tema que elijas.'
+  :'Nothing is stored. Each analysis fetches the page in memory, compares it and returns the result; there is no database, no history and nothing sent to third parties. The only things kept in your browser are the language and theme you pick.'},
+
+{id:'domains',k:'dominios competencia competidor cualquier competitor',
+ s:'que dominios,que paginas puedo,de la competencia,which domains,competitor,any site',
+ a:()=>LANG==='es'
+  ?'Cualquier dominio público, incluida la competencia: barkibu.com, santevet.es, lo que quieras. Todo se hace desde el servidor, así que no hace falta acceso al sitio ni instalar nada en él.'
+  :'Any public domain, competitors included: barkibu.com, santevet.es, whatever you like. Everything runs from the server, so it needs no access to the site and nothing installed on it.'},
+
+{id:'howuse',k:'usar tutorial empezar started',
+ s:'como se usa,como funciona,como lo uso,how do i use,how does it work,get started',
+ a:()=>LANG==='es'
+  ?'Escribe un dominio o una URL completa en el campo de arriba y pulsa Auditar. En unos segundos tienes el veredicto de cloaking, los puntos a corregir ordenados por gravedad y el detalle por bloques. La velocidad tarda algo más porque la mide Google.'
+  :'Type a domain or a full URL in the field above and press Audit. In a few seconds you get the cloaking verdict, the points to fix ordered by severity and the detail by section. Speed takes a little longer because Google measures it.'}
+];
+
+function answerFor(q){
+  const t=norm(q);
+  if(!t)return null;
+  const words=t.split(' ').filter(w=>w.length>2);
+  let best=null,bestScore=0;
+  for(const topic of TOPICS){
+    let score=0;
+    for(const phrase of (topic.s||'').split(','))
+      if(phrase&&t.indexOf(norm(phrase))>=0)score+=6;
+    const keys=topic.k.split(' ');
+    for(const w of words)if(keys.includes(w))score+=2;
+    if(score>bestScore){bestScore=score;best=topic}
+  }
+  if(!best||bestScore<2)return null;
+  return best.a(lastData);
+}
+
+function askAdd(text,who){
+  const m=el('div','ask-msg '+who);
+  m.appendChild(el('p',null,text));
+  askBody.appendChild(m);
+  askBody.scrollTop=askBody.scrollHeight;
+}
+function askFallback(){return LANG==='es'
+  ?'No estoy seguro de ésa. Puedo explicarte el cloaking, el veredicto de esta página, qué arreglar primero, title, meta description, canonical, hreflang, texto alternativo, datos estructurados, robots.txt, rastreadores de IA, velocidad, número de palabras, cabeceras de seguridad, densidad de términos, qué pasa con tus datos y qué dominios puedes auditar.'
+  :'I am not sure about that one. I can explain cloaking, this page’s verdict, what to fix first, title, meta description, canonical, hreflang, alt text, structured data, robots.txt, AI crawlers, speed, word count, security headers, term density, what happens to your data and which domains you can audit.'}
+function askSend(q){
+  askAdd(q,'me');
+  askAdd(answerFor(q)||askFallback(),'bot');
+}
+
+const ASK_CHIPS={
+ es:['¿Qué comprueba esta herramienta?','¿Qué es el cloaking?','¿Qué arreglo primero?','¿Qué pasa con mis datos?'],
+ en:['What does this tool check?','What is cloaking?','What should I fix first?','What happens to my data?']
+};
+function askReset(){
+  askBody.textContent='';
+  askAdd(LANG==='es'
+   ?'Hola. Puedo explicarte el resultado de esta página, qué significa cada comprobación y cómo usar la herramienta. ¿Qué quieres saber?'
+   :'Hello. I can explain this page’s result, what each check means and how to use the tool. What would you like to know?','bot');
+  const chips=el('div','ask-chips');
+  for(const c of ASK_CHIPS[LANG]||ASK_CHIPS.es){
+    const b=el('button','ask-chip',c);
+    b.type='button';
+    b.addEventListener('click',()=>askSend(c));
+    chips.appendChild(b);
+  }
+  askBody.appendChild(chips);
+}
+function askOpen(on){
+  askPanel.hidden=!on;
+  document.getElementById('help').setAttribute('aria-expanded',String(on));
+  if(on){if(!askBody.childElementCount)askReset();askInput.focus()}
+}
+document.getElementById('help').addEventListener('click',()=>askOpen(askPanel.hidden));
+document.getElementById('askClose').addEventListener('click',()=>askOpen(false));
+askForm.addEventListener('submit',e=>{
+  e.preventDefault();
+  const q=askInput.value.trim();
+  if(!q)return;
+  askInput.value='';
+  askSend(q);
+});
 
 const q=new URLSearchParams(location.search).get('url');
 if(q){input.value=q.replace(/^https?:\\/\\//,'');form.dispatchEvent(new Event('submit'));}

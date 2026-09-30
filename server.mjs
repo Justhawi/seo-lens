@@ -1,12 +1,113 @@
 // Plain Node server - same app, no Cloudflare needed.
 //   node server.mjs        then open http://localhost:8787
 // Useful for trying it locally, or for hosting anywhere Node runs.
+//
+// Access control: set SEOLENS_PASSWORD in the host's environment and the whole
+// app sits behind a login. Leave it unset and the app stays open, so nobody is
+// locked out before the variable exists.
 
 import http from "node:http";
+import crypto from "node:crypto";
 import { PAGE } from "./page.js";
+import { LOGIN_PAGE } from "./login.js";
 import { runAudit, fetchCoreWebVitals } from "./audit.js";
 
 const PORT = process.env.PORT || 8787;
+
+const PASSWORD = process.env.SEOLENS_PASSWORD || "";
+const AUTH_ON = PASSWORD.length > 0;
+const COOKIE = "seolens_session";
+const MAX_AGE = 60 * 60 * 12; // 12 hours
+
+// The session value is derived from the password, so changing the password in
+// the host's settings immediately invalidates every session that was issued
+// under the old one. The password itself is never put in a cookie.
+const SESSION_TOKEN = crypto
+  .createHmac("sha256", PASSWORD || "unset")
+  .update("seolens-session-v1")
+  .digest("hex");
+
+const sha256 = (s) => crypto.createHash("sha256").update(String(s), "utf8").digest();
+const PASSWORD_HASH = sha256(PASSWORD);
+
+function sameSecret(a, b) {
+  // Both are fixed-length digests, so this never leaks length.
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+function parseCookies(req) {
+  const out = {};
+  const raw = req.headers.cookie;
+  if (!raw) return out;
+  for (const part of raw.split(";")) {
+    const i = part.indexOf("=");
+    if (i < 0) continue;
+    out[part.slice(0, i).trim()] = decodeURIComponent(part.slice(i + 1).trim());
+  }
+  return out;
+}
+
+function isAuthed(req) {
+  if (!AUTH_ON) return true;
+  const v = parseCookies(req)[COOKIE];
+  if (!v) return false;
+  return sameSecret(Buffer.from(v, "utf8"), Buffer.from(SESSION_TOKEN, "utf8"));
+}
+
+function isSecureRequest(req) {
+  const proto = String(req.headers["x-forwarded-proto"] || "").split(",")[0].trim();
+  return proto === "https";
+}
+
+// A local path only, so ?next= can never bounce someone to another site.
+function safeNext(value) {
+  const v = String(value || "/");
+  if (!v.startsWith("/") || v.startsWith("//")) return "/";
+  return v;
+}
+
+// Small in-memory throttle. Enough to make guessing a shared password pointless
+// on a single instance; it resets when the service restarts.
+const attempts = new Map();
+const WINDOW = 15 * 60 * 1000;
+const MAX_TRIES = 8;
+
+function clientKey(req) {
+  const fwd = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim();
+  return fwd || req.socket.remoteAddress || "unknown";
+}
+
+function throttled(key) {
+  const rec = attempts.get(key);
+  if (!rec) return false;
+  if (Date.now() > rec.until) {
+    attempts.delete(key);
+    return false;
+  }
+  return rec.n >= MAX_TRIES;
+}
+
+function noteFailure(key) {
+  const now = Date.now();
+  const rec = attempts.get(key);
+  if (!rec || now > rec.until) attempts.set(key, { n: 1, until: now + WINDOW });
+  else rec.n += 1;
+}
+
+function readBody(req, limit = 4096) {
+  return new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", (c) => {
+      data += c;
+      if (data.length > limit) {
+        reject(new Error("Body too large"));
+        req.destroy();
+      }
+    });
+    req.on("end", () => resolve(data));
+    req.on("error", reject);
+  });
+}
 
 function isPrivateHost(h) {
   h = h.toLowerCase();
@@ -17,19 +118,111 @@ function isPrivateHost(h) {
   return false;
 }
 
+const SECURITY_HEADERS = {
+  "x-content-type-options": "nosniff",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "strict-transport-security": "max-age=31536000; includeSubDomains",
+  "x-frame-options": "DENY",
+};
+
+function sendHtml(res, html, status = 200, extra = {}) {
+  res.writeHead(status, {
+    "content-type": "text/html; charset=utf-8",
+    "cache-control": "no-store",
+    ...SECURITY_HEADERS,
+    ...extra,
+  });
+  res.end(html);
+}
+
 http
   .createServer(async (req, res) => {
     const url = new URL(req.url, `http://${req.headers.host}`);
+    const send = (obj, status = 200) => {
+      res.writeHead(status, {
+        "content-type": "application/json; charset=utf-8",
+        "cache-control": "no-store",
+        ...SECURITY_HEADERS,
+      });
+      res.end(JSON.stringify(obj));
+    };
 
+    // ---- the gate -------------------------------------------------------
+    if (url.pathname === "/login") {
+      if (!AUTH_ON) {
+        res.writeHead(302, { location: "/" });
+        return res.end();
+      }
+      if (isAuthed(req)) {
+        res.writeHead(302, { location: safeNext(url.searchParams.get("next")) });
+        return res.end();
+      }
+      if (req.method === "POST") {
+        const key = clientKey(req);
+        if (throttled(key)) {
+          return sendHtml(
+            res,
+            LOGIN_PAGE({
+              error: "Demasiados intentos. Vuelve a probar dentro de 15 minutos.",
+              next: "/",
+            }),
+            429
+          );
+        }
+        let body = "";
+        try {
+          body = await readBody(req);
+        } catch (e) {
+          return sendHtml(res, LOGIN_PAGE({ error: "Peticion no valida.", next: "/" }), 400);
+        }
+        const form = new URLSearchParams(body);
+        const next = safeNext(form.get("next"));
+        if (sameSecret(sha256(form.get("password") || ""), PASSWORD_HASH)) {
+          attempts.delete(key);
+          const flags = [
+            `${COOKIE}=${SESSION_TOKEN}`,
+            "HttpOnly",
+            "Path=/",
+            "SameSite=Lax",
+            `Max-Age=${MAX_AGE}`,
+          ];
+          if (isSecureRequest(req)) flags.push("Secure");
+          res.writeHead(302, { location: next, "set-cookie": flags.join("; ") });
+          return res.end();
+        }
+        noteFailure(key);
+        return sendHtml(
+          res,
+          LOGIN_PAGE({ error: "Contrasena incorrecta.", next }),
+          401
+        );
+      }
+      return sendHtml(res, LOGIN_PAGE({ next: safeNext(url.searchParams.get("next")) }));
+    }
+
+    if (url.pathname === "/logout") {
+      const flags = [`${COOKIE}=`, "HttpOnly", "Path=/", "SameSite=Lax", "Max-Age=0"];
+      if (isSecureRequest(req)) flags.push("Secure");
+      res.writeHead(302, {
+        location: AUTH_ON ? "/login" : "/",
+        "set-cookie": flags.join("; "),
+      });
+      return res.end();
+    }
+
+    if (!isAuthed(req)) {
+      if (url.pathname.startsWith("/api/")) {
+        return send({ ok: false, error: "Sesion caducada.", authRequired: true }, 401);
+      }
+      res.writeHead(302, {
+        location: "/login?next=" + encodeURIComponent(url.pathname + url.search),
+      });
+      return res.end();
+    }
+
+    // ---- the app --------------------------------------------------------
     if (url.pathname === "/api/audit") {
       const target = url.searchParams.get("url");
-      const send = (obj, status = 200) => {
-        res.writeHead(status, {
-          "content-type": "application/json; charset=utf-8",
-          "cache-control": "no-store",
-        });
-        res.end(JSON.stringify(obj));
-      };
       if (!target) return send({ ok: false, error: "Add a ?url= parameter." }, 400);
       let parsed;
       try {
@@ -50,13 +243,6 @@ http
 
     if (url.pathname === "/api/cwv") {
       const target = url.searchParams.get("url");
-      const send = (obj, status = 200) => {
-        res.writeHead(status, {
-          "content-type": "application/json; charset=utf-8",
-          "cache-control": "no-store",
-        });
-        res.end(JSON.stringify(obj));
-      };
       if (!target) return send({ ok: false, error: "Add a ?url= parameter." }, 400);
       try {
         return send(await fetchCoreWebVitals(target));
@@ -66,17 +252,14 @@ http
     }
 
     if (url.pathname === "/" || url.pathname === "/index.html") {
-      res.writeHead(200, {
-        "content-type": "text/html; charset=utf-8",
-        "x-content-type-options": "nosniff",
-        "referrer-policy": "strict-origin-when-cross-origin",
-      });
-      return res.end(PAGE);
+      // Tells the page a session exists, so it can show the log-out item.
+      return sendHtml(res, AUTH_ON ? PAGE.replace('data-auth="0"', 'data-auth="1"') : PAGE);
     }
 
-    res.writeHead(404, { "content-type": "text/plain" });
+    res.writeHead(404, { "content-type": "text/plain", ...SECURITY_HEADERS });
     res.end("Not found");
   })
   .listen(PORT, () => {
     console.log(`SEO Lens running at http://localhost:${PORT}`);
+    console.log(AUTH_ON ? "Access: password required." : "Access: open (SEOLENS_PASSWORD is not set).");
   });
