@@ -155,15 +155,65 @@ animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .foot{margin-top:26px;font-size:12.5px;color:var(--text-muted);
 display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.app{display:flex;min-height:100vh}
+.side{width:252px;flex:none;background:var(--surface-1);border-right:1px solid var(--border);
+display:flex;flex-direction:column;position:sticky;top:0;height:100vh}
+.logo{padding:16px 18px 14px}
+.wordmark{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--pp-blue);letter-spacing:-.02em;line-height:1}
+.wordmark sup{font-size:11px;vertical-align:super;font-weight:400}
+.licence{margin-top:6px;font-size:11.5px;color:var(--text-muted)}
+.nav{padding:4px 0}
+.nav a{display:flex;align-items:center;gap:12px;padding:11px 18px;text-decoration:none;
+color:var(--text-primary);font-size:15px;border-left:3px solid transparent;cursor:pointer}
+.nav a:hover{background:var(--surface-2)}
+.nav a.on{background:var(--brand-soft);color:var(--pp-blue);font-weight:bold;border-left-color:var(--pp-blue)}
+.ico{width:16px;text-align:center;font-size:15px;line-height:1}
+.i-y{color:var(--pp-yellow)}.i-o{color:var(--pp-orange)}.i-g{color:var(--pp-green)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.burger{display:none;width:26px;height:26px;border:0;background:transparent;cursor:pointer;padding:0;align-items:center;justify-content:center}
+.burger i{display:block;width:20px;height:2px;background:#fff;position:relative}
+.burger i::before,.burger i::after{content:"";position:absolute;left:0;width:20px;height:2px;background:#fff}
+.burger i::before{top:-6px}.burger i::after{top:6px}
+.tbtitle{font-size:13px;letter-spacing:.13em;text-transform:uppercase}
+.tbright{margin-left:auto;display:flex;align-items:center;gap:12px}
+.icobtn{width:28px;height:28px;border:0;background:transparent;color:#fff;cursor:pointer;font-size:15px;line-height:1;border-radius:50%;padding:0}
+.icobtn:hover{background:rgba(255,255,255,.16)}
+.wrap{flex:1;padding:22px 26px 70px;max-width:1080px;width:100%;margin:0}
+.guide ol{margin:0;padding-left:0;list-style:none}
+.guide li{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.guide li:last-child{border-bottom:0}
+.guide li b.num{flex:none;width:22px;height:22px;border-radius:50%;background:var(--pp-blue);
+color:#fff;display:grid;place-items:center;font-size:12px;font-weight:400}
+.guide p{margin:0;font-size:14px;color:var(--text-secondary)}
+.guide strong{color:var(--text-primary)}
+.callout{margin-top:14px;padding:11px 14px;background:var(--ok-soft);border-radius:var(--radius);font-size:13.5px;color:var(--text-secondary)}
+.help{position:fixed;right:22px;bottom:22px;z-index:30;display:flex;align-items:center;gap:8px;
+padding:10px 18px;border:0;border-radius:999px;background:var(--pp-blue);color:#fff;
+font:inherit;font-size:14px;cursor:pointer;box-shadow:0 2px 10px rgba(0,48,87,.3)}
+.help:hover{background:var(--pp-blue-dark)}
+@media (max-width:860px){
+.side{position:fixed;left:0;top:0;z-index:40;transform:translateX(-100%);transition:transform .2s;box-shadow:0 0 30px rgba(0,0,0,.2)}
+.side.open{transform:none}.burger{display:flex}.wrap{padding:18px 16px 70px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<div class="app">
+<aside class="side" id="side">
+  <div class="logo">
+    <div class="wordmark">Petplan<sup>&reg;</sup></div>
+    <div class="licence">Licencia: Petplan Ib&eacute;rica SL</div>
+  </div>
+  <nav class="nav">
+    <a class="on" id="navAudit"><span class="ico i-y">&#9650;</span> Auditar</a>
+    <a id="navGuide"><span class="ico i-g">&#9646;</span> Gu&iacute;a</a>
+  </nav>
+</aside>
+<div class="main">
 <div class="topbar">
-<span class="brand">Petplan</span>
-<span class="sep"></span>
-<span class="page">SEO Lens</span>
-<span class="right">Uso interno</span>
+<button class="burger" id="burger" type="button" aria-label="Menu"><i></i></button>
+<span class="tbtitle" id="tbtitle">Auditar p&aacute;gina</span>
+<span class="tbright"><button class="icobtn" id="theme" type="button" aria-label="Cambiar tema">&#9789;</button></span>
 </div>
 
 <div class="wrap">
@@ -182,10 +232,25 @@ si esa pagina sirve a Google algo distinto de lo que ves tu.</p>
 <p class="hint">No se guarda nada. Cada analisis descarga la pagina dos veces &mdash; una como navegador y otra como Googlebot &mdash; y las compara.</p>
 </div></div>
 
+<div class="card guide" id="guide" style="display:none">
+<h2>C&oacute;mo funciona</h2>
+<div class="pad">
+<ol>
+<li><b class="num">1</b><p><strong>Descarga la p&aacute;gina dos veces.</strong> Una con la identidad de un navegador normal y otra con la de Googlebot, desde el mismo servidor.</p></li>
+<li><b class="num">2</b><p><strong>Compara las dos copias.</strong> T&iacute;tulo, meta description y tama&ntilde;o del texto. Si no coinciden, la p&aacute;gina hace cloaking: ense&ntilde;a a Google algo que t&uacute; no ves al visitarla.</p></li>
+<li><b class="num">3</b><p><strong>Audita el resto.</strong> Canonical, hreflang, Open Graph, encabezados, texto alternativo, datos estructurados, robots.txt, rastreadores de IA y densidad de t&eacute;rminos.</p></li>
+</ol>
+<div class="callout">Funciona con cualquier dominio, tambi&eacute;n el de la competencia. No hace falta acceso al sitio ni cuenta de ning&uacute;n tipo.</div>
+</div></div>
+
 <div id="out"></div>
 
 <div class="foot"><span>SEO Lens &middot; Petplan Iberica</span><span id="stamp"></span></div>
 </div>
+</div>
+</div>
+
+<button class="help" id="help" type="button">&#9679; Ayuda</button>
 
 <script>
 const out=document.getElementById('out');
@@ -193,6 +258,27 @@ const form=document.getElementById('f');
 const input=document.getElementById('u');
 const go=document.getElementById('go');
 let findings=[];
+
+const guide=document.getElementById('guide');
+document.getElementById('burger').addEventListener('click',()=>{document.getElementById('side').classList.toggle('open')});
+document.getElementById('theme').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);
+  r.setAttribute('data-theme',dark?'light':'dark');
+  try{localStorage.setItem('seolens-theme',dark?'light':'dark')}catch(e){}
+});
+try{const t=localStorage.getItem('seolens-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}
+function showGuide(on){
+  guide.style.display=on?'':'none';
+  document.getElementById('navGuide').classList.toggle('on',on);
+  document.getElementById('navAudit').classList.toggle('on',!on);
+  document.getElementById('tbtitle').textContent=on?'Guia':'Auditar pagina';
+  document.getElementById('side').classList.remove('open');
+}
+document.getElementById('navGuide').addEventListener('click',()=>showGuide(true));
+document.getElementById('navAudit').addEventListener('click',()=>showGuide(false));
+document.getElementById('help').addEventListener('click',()=>showGuide(true));
+
 
 function el(t,c,x){const n=document.createElement(t);if(c)n.className=c;
 if(x!==undefined&&x!==null)n.textContent=String(x);return n}
@@ -219,6 +305,7 @@ form.addEventListener('submit',async e=>{
   e.preventDefault();
   const url=input.value.trim();
   if(!url)return;
+  showGuide(false);
   findings=[];
   go.disabled=true;go.textContent='Auditando';
   out.textContent='';
