@@ -263,74 +263,6 @@ background:var(--pp-blue);border:0;border-radius:var(--radius);cursor:pointer}
 .acctmenu a.item{text-decoration:none}
 html:not([data-auth="1"]) .needauth{display:none}
 @media (max-width:520px){.ask-panel{right:10px;left:10px;width:auto;bottom:66px}}
-
-.qbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px}
-.qb-t{font-family:var(--font-display);font-weight:400;font-size:19.5px;color:var(--brand)}
-.qnote{margin:0 0 16px;font-size:13.5px;color:var(--text-secondary);max-width:80ch}
-.draft{background:var(--surface-1);border:1px solid var(--border);border-radius:var(--radius);
-box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
-.draft.dc-ok{border-left:3px solid var(--pp-green)}
-.draft.dc-no{border-left:3px solid var(--pp-cta);opacity:.72}
-.dhead{display:flex;align-items:flex-start;gap:12px;padding:16px 18px 10px}
-.dnum{flex:none;width:24px;height:24px;border-radius:50%;background:var(--brand-soft);color:var(--pp-blue);
-display:grid;place-items:center;font-size:12px;font-weight:bold}
-.dtitle{flex:1;min-width:0}
-.dt-main{font-family:var(--font-display);font-size:17px;color:var(--brand);line-height:1.3}
-.dt-slug{margin-top:3px;font-size:12px;color:var(--text-muted);overflow-wrap:anywhere}
-.dstatus{flex:none;font-size:11.5px;font-weight:bold;padding:4px 10px;border-radius:999px;white-space:nowrap}
-.dstatus.s-pend{background:var(--warn-soft);color:var(--warn)}
-.dstatus.s-ok{background:var(--ok-soft);color:var(--ok)}
-.dstatus.s-no{background:var(--crit-soft);color:var(--crit)}
-.dmeta{padding:0 18px 10px;font-size:13px;color:var(--text-secondary);display:flex;gap:8px}
-.dm-k{flex:none;font-weight:bold;color:var(--text-muted)}
-.ddupe{display:flex;align-items:center;gap:8px;margin:0 18px 10px;padding:8px 12px;
-border-radius:var(--radius);background:var(--surface-2);font-size:12.5px;color:var(--text-secondary)}
-.ddupe.dd-ok{background:var(--ok-soft)}
-.ddupe.dd-bad{background:var(--crit-soft);color:var(--crit)}
-.dd-tick{color:var(--ok);font-weight:bold}
-.dd-warn{color:var(--crit);font-weight:bold}
-.dflag{display:flex;align-items:flex-start;gap:8px;margin:0 18px 10px;padding:9px 12px;
-border-radius:var(--radius);background:var(--warn-soft);color:var(--warn);font-size:12.5px}
-.dflag-i{flex:none;font-weight:bold}
-.dtools{display:flex;gap:8px;padding:0 18px 16px;flex-wrap:wrap}
-.dbtn{padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border-strong);
-background:var(--surface-1);color:var(--text-primary);font:inherit;font-size:13.5px;cursor:pointer}
-.dbtn:hover{background:var(--surface-2)}
-.dbtn.ok:hover{background:var(--ok-soft);border-color:var(--pp-green);color:var(--ok)}
-.dbtn.no:hover{background:var(--crit-soft);border-color:var(--pp-cta);color:var(--crit)}
-.dbody{border-top:1px solid var(--border);background:var(--surface-0)}
-.dbody[hidden]{display:none}
-.facts{padding:14px 18px;border-bottom:1px solid var(--border)}
-.facts-h{font-size:12px;font-weight:bold;letter-spacing:.06em;text-transform:uppercase;
-color:var(--text-muted);margin-bottom:8px}
-.facts-t{width:100%;border-collapse:collapse;font-size:12.5px}
-.facts-t td{padding:5px 0;vertical-align:top;border-bottom:1px solid var(--border)}
-.facts-t tr:last-child td{border-bottom:0}
-.fc-claim{color:var(--text-primary);padding-right:14px}
-.fc-src{color:var(--text-muted);white-space:nowrap;text-align:right;font-size:11.5px}
-.pvframe{padding:20px;background:#e9eef2;overflow-x:auto}
-.preview{width:867px;max-width:100%;margin:0 auto;padding:26px 0 34px;background:#fff;
-font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:16px;line-height:25px;color:#333}
-.pv-h1{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
-font-weight:400;font-size:50px;line-height:55px;color:#143c74;text-align:center;margin:0 0 26px}
-.pv-fig{margin:0 0 10px}
-.pv-fig img{display:block;width:100%;height:auto;aspect-ratio:1170/540;object-fit:cover;object-position:center}
-.pv-fig figcaption{margin-top:6px;font-size:11.5px;color:#8a97a1}
-.pv-noimg{margin:0 0 10px;padding:28px 16px;border:1px dashed #b6c9d5;text-align:center;
-font-size:13px;color:#5c6b76;background:#f7fafc}
-.pv-meta{font-size:13px;color:#8a97a1;margin:0 0 24px}
-.preview p{margin:0 0 17.6px;font-size:16px;line-height:25px;color:#333}
-.pv-h2{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
-font-weight:400;font-size:36px;line-height:40px;color:#0055a4;margin:43.2px 0}
-.pv-h3{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
-font-weight:400;font-size:28px;line-height:35px;color:#4e7a1e;margin:31.64px 0}
-.preview strong{font-weight:bold;color:#333}
-.pv-cta{margin-top:34px;text-align:center}
-.pv-cta img{display:inline-block;max-width:300px;width:100%;height:auto}
-.pv-ctanote{display:block;margin-top:8px;font-size:11.5px;color:#8a97a1}
-@media (max-width:980px){.pvframe{padding:12px}.preview{width:100%}
-.pv-h1{font-size:34px;line-height:38px}.pv-h2{font-size:26px;line-height:30px;margin:28px 0}
-.pv-h3{font-size:21px;line-height:26px;margin:22px 0}}
 </style>
 </head>
 <body>
@@ -342,7 +274,6 @@ font-weight:400;font-size:28px;line-height:35px;color:#4e7a1e;margin:31.64px 0}
   </div>
   <nav class="nav">
     <a class="on" id="navAudit"><svg class="ico i-y" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg> <span data-t="navAudit"></span></a>
-    <a id="navBlog"><svg class="ico i-o" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M4 4h16v2H4zm0 5h16v2H4zm0 5h11v2H4zm0 5h11v2H4z"/></svg> <span data-t="navBlog"></span></a>
     <a id="navGuide"><svg class="ico i-g" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2z"/></svg> <span data-t="navGuide"></span></a>
   </nav>
 </aside>
@@ -400,8 +331,6 @@ font-weight:400;font-size:28px;line-height:35px;color:#4e7a1e;margin:31.64px 0}
 </div>
 
 <div id="out"></div>
-
-<div id="blogWrap" hidden></div>
 
 <div class="foot"><span>SEO Lens &middot; Petplan Ib&eacute;rica</span><span id="stamp"></span></div>
 </main>
@@ -489,20 +418,6 @@ noFieldNote:"Google no tiene tráfico de Chrome suficiente para esta URL, así q
 lcpLab:"LCP, laboratorio",clsLab:"CLS, laboratorio",tbt:"Tiempo total de bloqueo",fcp:"First contentful paint",
 zero:"ninguno",docTitle:"SEO Lens · Auditoría · Petplan",
 account:"Cuenta",acctSub:"SEO Lens · auditoría on-page",logout:"Cerrar sesión",
-navBlog:"Borradores",tbBlog:"Cola de borradores",
-blogQueueTitle:"Cola de revisión · {n} borradores",
-blogQueueNote:"Nada de esto está publicado. Las decisiones se guardan sólo en este navegador: cuando termines, dime cuáles has aprobado y los subo a WordPress.",
-blogLoading:"Cargando borradores…",blogLoadFailed:"No se pudieron cargar los borradores.",blogEmpty:"No hay borradores en cola.",
-blogPending:"Pendiente",blogApproved:"Aprobado",blogRejected:"Rechazado",
-blogApprove:"Aprobar",blogReject:"Rechazar",blogRead:"Leer el borrador",blogHide:"Ocultar",
-blogNApproved:"{n} aprobados",blogNRejected:"{n} rechazados",blogNPending:"{n} pendientes",
-blogNApproved1:"{n} aprobado",blogNRejected1:"{n} rechazado",blogNPending1:"{n} pendiente",
-blogMeta:"Meta:",blogFaq:"Preguntas frecuentes",blogRelated:"Artículos relacionados:",
-blogFactsTitle:"Cada dato y su fuente",
-blogDupeChecking:"Comprobando duplicados…",blogDupeClean:"Sin duplicados entre las {n} publicaciones del blog",
-blogDupeFound:"Posible duplicado entre las {n} publicaciones:",blogDupeFailed:"No se pudo comprobar duplicados",
-blogNoImage:"Falta la imagen. Búsqueda prevista:",
-blogCtaNote:"CTA existente de Petplan. No se sustituye por otro.",blogByline:"Por Petplan",
 askTitle:"Asistente",askSub:"Responde sobre esta auditoría y sobre cómo usar la herramienta.",
 askClose:"Cerrar",askPlaceholder:"Escribe tu pregunta",askSend:"Enviar"
 },
@@ -570,20 +485,6 @@ noFieldNote:"Google does not have enough Chrome traffic for this URL, so only la
 lcpLab:"LCP, lab",clsLab:"CLS, lab",tbt:"Total blocking time",fcp:"First contentful paint",
 zero:"none",docTitle:"SEO Lens · Audit · Petplan",
 account:"Account",acctSub:"SEO Lens · on-page audit",logout:"Log out",
-navBlog:"Drafts",tbBlog:"Draft queue",
-blogQueueTitle:"Review queue · {n} drafts",
-blogQueueNote:"None of this is published. Decisions are kept in this browser only: when you are done, tell me which ones you approved and I will put them on WordPress.",
-blogLoading:"Loading drafts…",blogLoadFailed:"The drafts could not be loaded.",blogEmpty:"Nothing in the queue.",
-blogPending:"Pending",blogApproved:"Approved",blogRejected:"Rejected",
-blogApprove:"Approve",blogReject:"Reject",blogRead:"Read the draft",blogHide:"Hide",
-blogNApproved:"{n} approved",blogNRejected:"{n} rejected",blogNPending:"{n} pending",
-blogNApproved1:"{n} approved",blogNRejected1:"{n} rejected",blogNPending1:"{n} pending",
-blogMeta:"Meta:",blogFaq:"Frequently asked questions",blogRelated:"Related articles:",
-blogFactsTitle:"Every figure and its source",
-blogDupeChecking:"Checking for duplicates…",blogDupeClean:"No duplicate among the blog\\u2019s {n} posts",
-blogDupeFound:"Possible duplicate among {n} posts:",blogDupeFailed:"Duplicate check unavailable",
-blogNoImage:"Image missing. Planned search:",
-blogCtaNote:"Petplan\\u2019s existing CTA. Not replaced by another.",blogByline:"By Petplan",
 askTitle:"Assistant",askSub:"Answers about this audit and about using the tool.",
 askClose:"Close",askPlaceholder:"Type your question",askSend:"Send"
 }};
@@ -629,7 +530,7 @@ function applyStatic(){
     n.setAttribute('aria-label',s);
     if(n.tagName==='BUTTON')n.setAttribute('title',s);
   }
-  document.getElementById('tbtitle').textContent=T(typeof view!=='undefined'&&view==='blog'?'tbBlog':'tbAudit');
+  document.getElementById('tbtitle').textContent=T('tbAudit');
   if(!go.disabled)go.textContent=T('btnAudit');
   for(const b of document.querySelectorAll('.lang'))b.classList.toggle('on',b.getAttribute('data-lang')===LANG);
   document.title=T('docTitle');
@@ -641,7 +542,6 @@ function setLang(code){
   applyStatic();
   redraw();
   if(typeof askBody!=='undefined'&&askBody.childElementCount)askReset();
-  if(typeof blogLoaded!=='undefined'&&blogLoaded)renderBlog();
 }
 for(const b of document.querySelectorAll('.lang'))
   b.addEventListener('click',()=>setLang(b.getAttribute('data-lang')));
@@ -655,17 +555,12 @@ function focusGuide(){
 let view='audit';
 function showView(v){
   view=v;
-  const blogOn = v==='blog';
-  blogWrap.hidden = !blogOn;
-  for(const id of ['auditTop','out']) document.getElementById(id).style.display = blogOn?'none':'';
-  document.querySelector('.pagebar').style.display = blogOn?'none':'';
-  document.getElementById('navBlog').classList.toggle('on',blogOn);
-  document.getElementById('navAudit').classList.toggle('on',!blogOn);
-  document.getElementById('tbtitle').textContent=T(blogOn?'tbBlog':'tbAudit');
+  for(const id of ['auditTop','out']) document.getElementById(id).style.display='';
+  document.querySelector('.pagebar').style.display='';
+  document.getElementById('navAudit').classList.add('on');
+  document.getElementById('tbtitle').textContent=T('tbAudit');
   document.getElementById('side').classList.remove('open');
-  if(blogOn) loadBlog();
 }
-document.getElementById('navBlog').addEventListener('click',()=>showView('blog'));
 function focusAudit(){
   showView('audit');
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1241,209 +1136,6 @@ askForm.addEventListener('submit',e=>{
   askSend(q);
 });
 
-/* ---- Cola de revisión de borradores --------------------------------------
-   Reads /api/drafts. Nothing here publishes anything: the decisions live in
-   this browser until you tell Claude what you approved.                    */
-
-const CTA_IMG = 'https://petplan.es/wp-content/uploads/2021/01/solicita-precio-veterianrio-petplan.jpg';
-const blogWrap = document.getElementById('blogWrap');
-let DRAFTS = [], decisions = {};
-
-try { decisions = JSON.parse(localStorage.getItem('seolens-decisions') || '{}') } catch (e) { decisions = {} }
-function saveDecisions(){ try{ localStorage.setItem('seolens-decisions', JSON.stringify(decisions)) }catch(e){} }
-
-function setDecision(id, value){
-  if (decisions[id] === value) delete decisions[id]; else decisions[id] = value;
-  saveDecisions();
-  renderBlog();
-}
-
-function decisionCounts(){
-  let a=0,r=0;
-  for (const d of DRAFTS){ if(decisions[d.id]==='ok')a++; else if(decisions[d.id]==='no')r++; }
-  return {a, r, p: DRAFTS.length - a - r};
-}
-
-function articlePreview(d){
-  // Mirrors the live article template on petplan.es: centred H1, hero image,
-  // author line, plain paragraphs, then the Solicita precio image at the end.
-  const frame = el('div','pvframe');
-  const w = el('div','preview');
-  w.appendChild(el('h1','pv-h1', d.title));
-  if (d.image){
-    const fig = el('figure','pv-fig');
-    const im = document.createElement('img');
-    im.src = d.image.url; im.alt = d.image.alt || d.title; im.loading='lazy';
-    fig.appendChild(im);
-    fig.appendChild(el('figcaption', null, d.image.credit + ' \\u00b7 ' + d.image.licence));
-    w.appendChild(fig);
-  } else {
-    const miss = el('div','pv-noimg');
-    miss.appendChild(el('strong', null, T('blogNoImage')));
-    miss.appendChild(el('span', null, ' ' + (d.imageQuery||'')));
-    w.appendChild(miss);
-  }
-  w.appendChild(el('div','pv-meta', T('blogByline')));
-  w.appendChild(el('p', null, d.lede));
-  for (const [tag, text] of d.body){
-    const node = document.createElement(tag === 'h2' ? 'h2' : 'p');
-    if (tag === 'h2') node.className = 'pv-h2';
-    node.innerHTML = text;
-    w.appendChild(node);
-  }
-  if (d.faq && d.faq.length){
-    w.appendChild(el('h2','pv-h2', T('blogFaq')));
-    for (const [q, ans] of d.faq){
-      w.appendChild(el('h3','pv-h3', q));
-      w.appendChild(el('p', null, ans));
-    }
-  }
-  const cta = el('div','pv-cta');
-  const ci = document.createElement('img');
-  ci.src = CTA_IMG; ci.alt = 'Solicita precio de tu seguro veterinario'; ci.loading='lazy';
-  cta.appendChild(ci);
-  cta.appendChild(el('span','pv-ctanote', T('blogCtaNote')));
-  w.appendChild(cta);
-  frame.appendChild(w);
-  return frame;
-}
-
-function factPanel(d){
-  const p = el('div','facts');
-  p.appendChild(el('div','facts-h', T('blogFactsTitle')));
-  const t = el('table','facts-t');
-  for (const [claim, src] of d.facts){
-    const tr = el('tr');
-    tr.appendChild(el('td','fc-claim', claim));
-    tr.appendChild(el('td','fc-src', src));
-    t.appendChild(tr);
-  }
-  p.appendChild(t);
-  return p;
-}
-
-function draftCard(d, i){
-  const card = el('div','draft' + (decisions[d.id] ? ' dc-' + decisions[d.id] : ''));
-
-  const head = el('div','dhead');
-  head.appendChild(el('span','dnum', String(i+1)));
-  const ti = el('div','dtitle');
-  ti.appendChild(el('div','dt-main', d.title));
-  ti.appendChild(el('div','dt-slug', d.slug));
-  head.appendChild(ti);
-  const st = el('span','dstatus s-' + (decisions[d.id]||'pend'),
-    T(decisions[d.id]==='ok' ? 'blogApproved' : decisions[d.id]==='no' ? 'blogRejected' : 'blogPending'));
-  head.appendChild(st);
-  card.appendChild(head);
-
-  const meta = el('div','dmeta');
-  meta.appendChild(el('span','dm-k', T('blogMeta')));
-  meta.appendChild(el('span', null, d.meta));
-  card.appendChild(meta);
-
-  const dup = el('div','ddupe');
-  dup.appendChild(el('span','spin'));
-  dup.appendChild(el('span','dd-txt', T('blogDupeChecking')));
-  card.appendChild(dup);
-  checkDupe(d, dup);
-
-  if (d.flag){
-    const f = el('div','dflag');
-    f.appendChild(el('span','dflag-i','!'));
-    f.appendChild(el('span', null, d.flag));
-    card.appendChild(f);
-  }
-
-  const tools = el('div','dtools');
-  const bOk = el('button','dbtn ok', T('blogApprove'));
-  const bNo = el('button','dbtn no', T('blogReject'));
-  const bSee = el('button','dbtn see', T('blogRead'));
-  [bOk,bNo,bSee].forEach(b=>b.type='button');
-  bOk.addEventListener('click', ()=>setDecision(d.id,'ok'));
-  bNo.addEventListener('click', ()=>setDecision(d.id,'no'));
-  tools.appendChild(bOk); tools.appendChild(bNo); tools.appendChild(bSee);
-  card.appendChild(tools);
-
-  const panel = el('div','dbody');
-  panel.hidden = true;
-  panel.appendChild(factPanel(d));
-  panel.appendChild(articlePreview(d));
-  card.appendChild(panel);
-  bSee.addEventListener('click', ()=>{
-    panel.hidden = !panel.hidden;
-    bSee.textContent = T(panel.hidden ? 'blogRead' : 'blogHide');
-  });
-
-  return card;
-}
-
-async function checkDupe(d, node){
-  let res = null;
-  try {
-    const r = await fetch('/api/dupe?t=' + encodeURIComponent(d.title));
-    res = await r.json();
-  } catch (e) { res = null; }
-  node.textContent = '';
-  if (!res || !res.ok){
-    node.appendChild(el('span','dd-warn','?'));
-    node.appendChild(el('span','dd-txt', T('blogDupeFailed')));
-    return;
-  }
-  const clash = (res.matches||[]).filter(m => m.score >= 0.6);
-  if (clash.length){
-    node.classList.add('dd-bad');
-    node.appendChild(el('span','dd-warn','!'));
-    node.appendChild(el('span','dd-txt', T('blogDupeFound',{n:res.total}) + ' ' + clash[0].title));
-  } else {
-    node.classList.add('dd-ok');
-    node.appendChild(el('span','dd-tick','✓'));
-    node.appendChild(el('span','dd-txt', T('blogDupeClean',{n:res.total})));
-  }
-}
-
-function renderBlog(){
-  blogWrap.textContent = '';
-  if (!DRAFTS.length){
-    blogWrap.appendChild(el('div','msg', T('blogEmpty')));
-    return;
-  }
-  const c = decisionCounts();
-  const bar = el('div','qbar');
-  bar.appendChild(el('div','qb-t', T('blogQueueTitle',{n:DRAFTS.length})));
-  const pills = el('div','pills');
-  const plu=(n,k)=>T(k+(n===1?'1':''),{n:n});
-  pills.appendChild(el('span','pill p-good', plu(c.a,'blogNApproved')));
-  pills.appendChild(el('span','pill p-crit', plu(c.r,'blogNRejected')));
-  pills.appendChild(el('span','pill p-warn', plu(c.p,'blogNPending')));
-  bar.appendChild(pills);
-  blogWrap.appendChild(bar);
-
-  const note = el('p','qnote', T('blogQueueNote'));
-  blogWrap.appendChild(note);
-
-  for (let i=0;i<DRAFTS.length;i++) blogWrap.appendChild(draftCard(DRAFTS[i], i));
-}
-
-let blogLoaded = false;
-async function loadBlog(){
-  if (blogLoaded) { renderBlog(); return; }
-  blogWrap.textContent = '';
-  const m = el('div','msg');
-  m.appendChild(el('span','spin'));
-  m.appendChild(document.createTextNode(T('blogLoading')));
-  blogWrap.appendChild(m);
-  try {
-    const r = await fetch('/api/drafts');
-    const j = await r.json();
-    DRAFTS = j.drafts || [];
-    blogLoaded = true;
-  } catch (e) {
-    blogWrap.textContent = '';
-    blogWrap.appendChild(el('div','msg', T('blogLoadFailed')));
-    return;
-  }
-  renderBlog();
-}
 
 const q=new URLSearchParams(location.search).get('url');
 if(q){input.value=q.replace(/^https?:\\/\\//,'');form.dispatchEvent(new Event('submit'));}
