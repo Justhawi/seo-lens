@@ -314,7 +314,7 @@ font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:16px;line-heig
 .pv-h1{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
 font-weight:400;font-size:50px;line-height:55px;color:#143c74;text-align:center;margin:0 0 26px}
 .pv-fig{margin:0 0 10px}
-.pv-fig img{display:block;width:100%;height:auto}
+.pv-fig img{display:block;width:100%;height:auto;aspect-ratio:1170/540;object-fit:cover;object-position:center}
 .pv-fig figcaption{margin-top:6px;font-size:11.5px;color:#8a97a1}
 .pv-noimg{margin:0 0 10px;padding:28px 16px;border:1px dashed #b6c9d5;text-align:center;
 font-size:13px;color:#5c6b76;background:#f7fafc}
