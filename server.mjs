@@ -10,6 +10,7 @@ import http from "node:http";
 import crypto from "node:crypto";
 import { PAGE } from "./page.js";
 import { LOGIN_PAGE } from "./login.js";
+import { DRAFTS, CTA } from "./drafts.js";
 import { runAudit, fetchCoreWebVitals } from "./audit.js";
 
 const PORT = process.env.PORT || 8787;
@@ -236,6 +237,44 @@ http
       try {
         const result = await runAudit(parsed.href);
         return send(result, result.ok ? 200 : 400);
+      } catch (e) {
+        return send({ ok: false, error: String(e.message || e) }, 500);
+      }
+    }
+
+    if (url.pathname === "/api/drafts") {
+      return send({ ok: true, cta: CTA, drafts: DRAFTS });
+    }
+
+    // Duplicate check against the live blog, so it stays current rather than
+    // relying on a list that goes stale.
+    if (url.pathname === "/api/dupe") {
+      const q = (url.searchParams.get("t") || "").trim();
+      if (!q) return send({ ok: false, error: "Add a ?t= parameter." }, 400);
+      const stop = new Set(["para","como","que","los","las","del","con","una","por","the","and","your","what","how"]);
+      const words = (s) => new Set(
+        s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+         .replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((w) => w.length > 3 && !stop.has(w))
+      );
+      const a = words(q);
+      try {
+        const r = await fetch(
+          "https://petplan.es/wp-json/wp/v2/posts?per_page=10&_fields=slug,title&search=" +
+            encodeURIComponent(q),
+          { headers: { "user-agent": "SEO Lens duplicate check" } }
+        );
+        if (!r.ok) return send({ ok: false, error: "WordPress responded " + r.status }, 502);
+        const total = Number(r.headers.get("x-wp-total") || 0);
+        const posts = await r.json();
+        const matches = posts.map((p) => {
+          const t = String(p.title && p.title.rendered || "").replace(/<[^>]*>/g, "");
+          const b = words(t);
+          let hit = 0;
+          for (const w of a) if (b.has(w)) hit++;
+          const union = new Set([...a, ...b]).size || 1;
+          return { title: t, slug: p.slug, score: Number((hit / union).toFixed(2)) };
+        }).sort((x, y) => y.score - x.score);
+        return send({ ok: true, total, matches });
       } catch (e) {
         return send({ ok: false, error: String(e.message || e) }, 500);
       }
