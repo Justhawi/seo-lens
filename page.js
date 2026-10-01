@@ -308,24 +308,29 @@ color:var(--text-muted);margin-bottom:8px}
 .facts-t tr:last-child td{border-bottom:0}
 .fc-claim{color:var(--text-primary);padding-right:14px}
 .fc-src{color:var(--text-muted);white-space:nowrap;text-align:right;font-size:11.5px}
-.preview{padding:20px 22px 26px;background:var(--surface-1);max-width:72ch}
-.pv-h1{font-family:var(--font-display);font-weight:400;font-size:25px;color:var(--brand);
-margin:0 0 14px;line-height:1.25}
-.pv-fig{margin:0 0 16px}
-.pv-fig img{display:block;width:100%;height:auto;border-radius:var(--radius)}
-.pv-fig figcaption{margin-top:5px;font-size:11.5px;color:var(--text-muted)}
-.pv-noimg{margin:0 0 16px;padding:14px;border:1px dashed var(--border-strong);border-radius:var(--radius);
-font-size:13px;color:var(--text-secondary);background:var(--surface-0)}
-.pv-lede{font-size:15.5px;line-height:1.6;color:var(--text-primary);margin:0 0 16px}
-.pv-h2{font-family:var(--font-display);font-weight:400;font-size:19px;color:var(--brand);
-margin:22px 0 8px;line-height:1.3}
-.pv-h3{font-size:14.5px;font-weight:bold;color:var(--text-primary);margin:16px 0 4px}
-.preview p{margin:0 0 11px;font-size:14.5px;line-height:1.62;color:var(--text-primary)}
-.pv-rel{font-size:13px;color:var(--text-secondary)}
-.pv-slugs{color:var(--brand)}
-.pv-cta{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.pv-cta img{display:block;max-width:300px;width:100%;height:auto}
-.pv-ctanote{font-size:11.5px;color:var(--text-muted);text-align:center}
+.pvframe{padding:20px;background:#e9eef2;overflow-x:auto}
+.preview{width:867px;max-width:100%;margin:0 auto;padding:26px 0 34px;background:#fff;
+font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-size:16px;line-height:25px;color:#333}
+.pv-h1{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
+font-weight:400;font-size:50px;line-height:55px;color:#143c74;text-align:center;margin:0 0 26px}
+.pv-fig{margin:0 0 10px}
+.pv-fig img{display:block;width:100%;height:auto}
+.pv-fig figcaption{margin-top:6px;font-size:11.5px;color:#8a97a1}
+.pv-noimg{margin:0 0 10px;padding:28px 16px;border:1px dashed #b6c9d5;text-align:center;
+font-size:13px;color:#5c6b76;background:#f7fafc}
+.pv-meta{font-size:13px;color:#8a97a1;margin:0 0 24px}
+.preview p{margin:0 0 17.6px;font-size:16px;line-height:25px;color:#333}
+.pv-h2{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
+font-weight:400;font-size:36px;line-height:40px;color:#0055a4;margin:43.2px 0}
+.pv-h3{font-family:"American Typewriter","Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
+font-weight:400;font-size:28px;line-height:35px;color:#4e7a1e;margin:31.64px 0}
+.preview strong{font-weight:bold;color:#333}
+.pv-cta{margin-top:34px;text-align:center}
+.pv-cta img{display:inline-block;max-width:300px;width:100%;height:auto}
+.pv-ctanote{display:block;margin-top:8px;font-size:11.5px;color:#8a97a1}
+@media (max-width:980px){.pvframe{padding:12px}.preview{width:100%}
+.pv-h1{font-size:34px;line-height:38px}.pv-h2{font-size:26px;line-height:30px;margin:28px 0}
+.pv-h3{font-size:21px;line-height:26px;margin:22px 0}}
 </style>
 </head>
 <body>
@@ -497,7 +502,7 @@ blogFactsTitle:"Cada dato y su fuente",
 blogDupeChecking:"Comprobando duplicados…",blogDupeClean:"Sin duplicados entre las {n} publicaciones del blog",
 blogDupeFound:"Posible duplicado entre las {n} publicaciones:",blogDupeFailed:"No se pudo comprobar duplicados",
 blogNoImage:"Falta la imagen. Búsqueda prevista:",
-blogCtaNote:"CTA existente de Petplan. No se sustituye por otro.",
+blogCtaNote:"CTA existente de Petplan. No se sustituye por otro.",blogByline:"Por Petplan",
 askTitle:"Asistente",askSub:"Responde sobre esta auditoría y sobre cómo usar la herramienta.",
 askClose:"Cerrar",askPlaceholder:"Escribe tu pregunta",askSend:"Enviar"
 },
@@ -578,7 +583,7 @@ blogFactsTitle:"Every figure and its source",
 blogDupeChecking:"Checking for duplicates…",blogDupeClean:"No duplicate among the blog\\u2019s {n} posts",
 blogDupeFound:"Possible duplicate among {n} posts:",blogDupeFailed:"Duplicate check unavailable",
 blogNoImage:"Image missing. Planned search:",
-blogCtaNote:"Petplan\\u2019s existing CTA. Not replaced by another.",
+blogCtaNote:"Petplan\\u2019s existing CTA. Not replaced by another.",blogByline:"By Petplan",
 askTitle:"Assistant",askSub:"Answers about this audit and about using the tool.",
 askClose:"Close",askPlaceholder:"Type your question",askSend:"Send"
 }};
@@ -1260,6 +1265,9 @@ function decisionCounts(){
 }
 
 function articlePreview(d){
+  // Mirrors the live article template on petplan.es: centred H1, hero image,
+  // author line, plain paragraphs, then the Solicita precio image at the end.
+  const frame = el('div','pvframe');
   const w = el('div','preview');
   w.appendChild(el('h1','pv-h1', d.title));
   if (d.image){
@@ -1267,7 +1275,7 @@ function articlePreview(d){
     const im = document.createElement('img');
     im.src = d.image.url; im.alt = d.image.alt || d.title; im.loading='lazy';
     fig.appendChild(im);
-    fig.appendChild(el('figcaption', null, d.image.credit + ' · ' + d.image.licence));
+    fig.appendChild(el('figcaption', null, d.image.credit + ' \\u00b7 ' + d.image.licence));
     w.appendChild(fig);
   } else {
     const miss = el('div','pv-noimg');
@@ -1275,34 +1283,29 @@ function articlePreview(d){
     miss.appendChild(el('span', null, ' ' + (d.imageQuery||'')));
     w.appendChild(miss);
   }
-  w.appendChild(el('p','pv-lede', d.lede));
+  w.appendChild(el('div','pv-meta', T('blogByline')));
+  w.appendChild(el('p', null, d.lede));
   for (const [tag, text] of d.body){
-    const n = document.createElement(tag === 'h2' ? 'h2' : 'p');
-    if (tag === 'h2') n.className = 'pv-h2';
-    n.innerHTML = text;
-    w.appendChild(n);
+    const node = document.createElement(tag === 'h2' ? 'h2' : 'p');
+    if (tag === 'h2') node.className = 'pv-h2';
+    node.innerHTML = text;
+    w.appendChild(node);
   }
   if (d.faq && d.faq.length){
     w.appendChild(el('h2','pv-h2', T('blogFaq')));
-    for (const [q, a] of d.faq){
+    for (const [q, ans] of d.faq){
       w.appendChild(el('h3','pv-h3', q));
-      w.appendChild(el('p', null, a));
+      w.appendChild(el('p', null, ans));
     }
   }
-  if (d.related && d.related.length){
-    const rel = el('p','pv-rel');
-    rel.appendChild(el('span', null, T('blogRelated') + ' '));
-    rel.appendChild(el('span','pv-slugs', d.related.join('  ·  ')));
-    w.appendChild(rel);
-  }
-  // The real Petplan CTA image, not a substitute.
   const cta = el('div','pv-cta');
   const ci = document.createElement('img');
   ci.src = CTA_IMG; ci.alt = 'Solicita precio de tu seguro veterinario'; ci.loading='lazy';
   cta.appendChild(ci);
   cta.appendChild(el('span','pv-ctanote', T('blogCtaNote')));
   w.appendChild(cta);
-  return w;
+  frame.appendChild(w);
+  return frame;
 }
 
 function factPanel(d){
