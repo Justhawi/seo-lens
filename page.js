@@ -1434,7 +1434,7 @@ function drawCmp(rows){
   line(T('cmpSchema'), m => {
     const f = document.createDocumentFragment();
     f.appendChild(pill(m.schema.length+'', m.schema.length===bestSchema?'win':'lose'));
-    f.appendChild(el('span','cmp-sub', m.schema.length?m.schema.slice(0,6).join(', '):T('cmpNone')));
+    f.appendChild(el('span','cmp-sub', m.schema.length?m.schema.join(', '):T('cmpNone')));
     return f;
   });
   line(T('cmpFaq'), m => yn(m.faq,true));
