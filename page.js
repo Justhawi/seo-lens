@@ -263,6 +263,50 @@ background:var(--pp-blue);border:0;border-radius:var(--radius);cursor:pointer}
 .acctmenu a.item{text-decoration:none}
 html:not([data-auth="1"]) .needauth{display:none}
 @media (max-width:520px){.ask-panel{right:10px;left:10px;width:auto;bottom:66px}}
+.cmp-intro{margin:0 0 14px}
+.cmp-intro h2{margin:0 0 6px;font-size:19px;font-family:var(--font-display);color:var(--text-primary)}
+.cmp-intro p{margin:0;color:var(--text-secondary);font-size:13.5px;max-width:70ch;line-height:1.6}
+.cmp-form{display:grid;gap:11px;margin:0 0 20px}
+.cmp-form textarea{width:100%;min-height:104px;resize:vertical;padding:11px 13px;border:1px solid var(--border);
+border-radius:var(--radius);background:var(--surface-1);color:var(--text-primary);
+font:13.5px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}
+.cmp-form textarea:focus{outline:2px solid var(--pp-blue);outline-offset:1px;border-color:transparent}
+.cmp-acts{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.cmp-run,.cmp-alt{flex:none;padding:9px 18px;font:inherit;font-size:13.5px;font-weight:bold;
+border-radius:var(--radius);cursor:pointer;border:1px solid transparent}
+.cmp-run{background:var(--pp-blue);color:#fff}
+.cmp-run:hover:not(:disabled){background:var(--pp-blue-dark)}
+.cmp-alt{background:var(--surface-1);color:var(--text-primary);border-color:var(--border-strong)}
+.cmp-alt:hover:not(:disabled){border-color:var(--pp-blue);color:var(--pp-blue)}
+.cmp-run:disabled,.cmp-alt:disabled{opacity:.55;cursor:default}
+.cmp-note{font-size:12.5px;color:var(--text-muted)}
+.cmp-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);
+border-radius:var(--radius);background:var(--surface-1)}
+table.cmp{border-collapse:collapse;width:100%;min-width:600px;font-size:13.5px}
+table.cmp th,table.cmp td{border-bottom:1px solid var(--border);padding:10px 13px;text-align:left;vertical-align:top}
+table.cmp thead th{position:sticky;top:0;background:var(--surface-2);font-weight:600;font-size:12.5px;
+border-bottom:1px solid var(--border-strong);z-index:1}
+table.cmp thead th.mine .cmp-head{color:var(--pp-blue)}
+table.cmp th.lab{width:176px;color:var(--text-muted);font-weight:500}
+table.cmp td.mine{background:var(--brand-soft)}
+table.cmp tbody tr:last-child td,table.cmp tbody tr:last-child th{border-bottom:none}
+table.cmp tr.sect th{background:transparent;border-bottom:none;padding:20px 13px 5px;font-size:11px;
+text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);font-weight:600}
+.cmp-b{display:inline-block;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.cmp-b.win{background:var(--ok-soft);color:var(--ok)}
+.cmp-b.lose{background:var(--crit-soft);color:var(--crit)}
+.cmp-b.warn{background:var(--warn-soft);color:var(--warn)}
+.cmp-b.neutral{background:var(--surface-3);color:var(--text-secondary)}
+.cmp-sub{display:block;color:var(--text-muted);font-size:12px;margin-top:4px;line-height:1.5;word-break:break-word}
+.cmp-head{font-weight:600;color:var(--text-primary)}
+.cmp-head small{display:block;font-weight:400;color:var(--text-muted);font-size:11.5px;margin-top:3px;word-break:break-all}
+.cmp-gap{margin:22px 0 0;padding:15px 17px;border:1px solid var(--border);border-left:3px solid var(--pp-orange);
+border-radius:var(--radius);background:var(--surface-1)}
+.cmp-gap h3{margin:0 0 9px;font-size:14.5px;font-family:var(--font-display);color:var(--text-primary)}
+.cmp-gap ul{margin:0;padding-left:19px}
+.cmp-gap li{margin:0 0 6px;font-size:13.5px;line-height:1.6;color:var(--text-secondary)}
+.cmp-gap p{margin:0;font-size:13.5px;color:var(--text-secondary)}
+@media (max-width:720px){table.cmp th.lab{width:132px}table.cmp th,table.cmp td{padding:9px}}
 </style>
 </head>
 <body>
@@ -274,6 +318,7 @@ html:not([data-auth="1"]) .needauth{display:none}
   </div>
   <nav class="nav">
     <a class="on" id="navAudit"><svg class="ico i-y" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg> <span data-t="navAudit"></span></a>
+    <a id="navCmp"><svg class="ico i-o" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M3 4h8v16H3zm10 0h8v16h-8zM5 6v12h4V6zm10 0v12h4V6z"/></svg> <span data-t="navCmp"></span></a>
     <a id="navGuide"><svg class="ico i-g" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2z"/></svg> <span data-t="navGuide"></span></a>
   </nav>
 </aside>
@@ -332,6 +377,8 @@ html:not([data-auth="1"]) .needauth{display:none}
 
 <div id="out"></div>
 
+<div id="cmpWrap" hidden></div>
+
 <div class="foot"><span>SEO Lens &middot; Petplan Ib&eacute;rica</span><span id="stamp"></span></div>
 </main>
 </div>
@@ -355,7 +402,32 @@ html:not([data-auth="1"]) .needauth{display:none}
 
 const I18N={
 es:{
-licence:"Licencia: Petplan Ibérica SL",navAudit:"Auditar",navGuide:"Guía",
+licence:"Licencia: Petplan Ibérica SL",navAudit:"Auditar",navGuide:"Guía",navCmp:"Comparar",
+tbCmp:"Comparar con la competencia",
+cmpTitle:"Tu página frente a la de ellos",
+cmpLede:"Pega tu URL en la primera línea y las de la competencia debajo, una por línea. También sirve para comparar tus propias versiones en otros idiomas. Se audita cada una y se señala dónde vas por detrás.",
+cmpPh:"petplan.es/seguro-veterinario\\nbarkibu.com/es/seguro-perros\\nsantevet.es/seguro-perro",
+cmpRun:"Comparar",cmpRunning:"Comparando",cmpLangs:"Añadir mis otros idiomas",
+cmpNeed:"Hace falta al menos tu URL y una más.",cmpMax:"Máximo 5 URL por comparación.",
+cmpMine:"Tuya",cmpFailed:"No se pudo auditar",cmpStep:"Auditando {n} de {t}…",
+cmpLangNone:"Esta página no declara versiones en otros idiomas.",
+cmpSecBasics:"Lo básico",cmpSecContent:"Contenido",cmpSecSchema:"Datos estructurados",
+cmpSecIntl:"Idiomas",cmpSecTech:"Técnico",
+cmpStatus:"Estado HTTP",cmpTitleLen:"Título",cmpDescLen:"Meta descripción",
+cmpH1:"H1",cmpH2:"H2",cmpWords:"Palabras",cmpSchema:"Tipos de schema",cmpFaq:"FAQPage",
+cmpHreflang:"hreflang",cmpXdef:"x-default",cmpCanon:"Canónica propia",
+cmpImgs:"Imágenes con alt útil",cmpLinks:"Enlaces internos",cmpExt:"Enlaces externos",
+cmpCloak:"Cloaking",cmpCms:"CMS",cmpYes:"sí",cmpNo:"no",cmpNone:"ninguno",
+cmpGapTitle:"Dónde vas por detrás",cmpGapNone:"En esta comparación no quedas por detrás en ninguna de las métricas medidas.",
+cmpGapFaq:"{who} marca sus preguntas con FAQPage y tú no. Ya no da resultados enriquecidos en Google, pero sí lo leen los buscadores con IA.",
+cmpGapWords:"{who} escribe más sobre este tema: {n} palabras frente a tus {mine}.",
+cmpGapSchema:"{who} declara más tipos de schema: {n} frente a tus {mine}.",
+cmpGapDesc:"Tu meta descripción {why}.",cmpGapDescNone:"falta",cmpGapDescLong:"pasa de 155 caracteres y Google la cortará",
+cmpGapTitleLong:"Tu título pasa de 60 caracteres y Google lo cortará.",
+cmpGapNoH1:"Esta página no tiene H1.",
+cmpGapAlt:"{who} describe mejor sus imágenes: {n}% con alt útil frente a tu {mine}%.",
+cmpGapCanon:"Tu canónica no apunta a esta misma página.",
+cmpGapCloak:"Esta página sirve algo distinto a Googlebot que a un navegador.",
 tbAudit:"Auditar página",tbGuide:"Guía",menu:"Menú",theme:"Cambiar tema",urlField:"URL a auditar",
 h1:"Comprueba lo que ve Google",
 lede:"Auditoría on-page completa de cualquier URL, más la comprobación que casi nadie hace: si esa página sirve a Google algo distinto de lo que ves tú.",
@@ -422,7 +494,32 @@ askTitle:"Asistente",askSub:"Responde sobre esta auditoría y sobre cómo usar l
 askClose:"Cerrar",askPlaceholder:"Escribe tu pregunta",askSend:"Enviar"
 },
 en:{
-licence:"Licence: Petplan Ibérica SL",navAudit:"Audit",navGuide:"Guide",
+licence:"Licence: Petplan Ibérica SL",navAudit:"Audit",navGuide:"Guide",navCmp:"Compare",
+tbCmp:"Compare with competitors",
+cmpTitle:"Your page against theirs",
+cmpLede:"Put your URL on the first line and competitors below, one per line. It also works for comparing your own language versions. Each one is audited and anywhere you are behind is flagged.",
+cmpPh:"petplan.es/seguro-veterinario\\nbarkibu.com/es/seguro-perros\\nsantevet.es/seguro-perro",
+cmpRun:"Compare",cmpRunning:"Comparing",cmpLangs:"Add my other languages",
+cmpNeed:"Needs your URL and at least one other.",cmpMax:"Five URLs maximum per comparison.",
+cmpMine:"Yours",cmpFailed:"Could not audit",cmpStep:"Auditing {n} of {t}…",
+cmpLangNone:"This page declares no other language versions.",
+cmpSecBasics:"Basics",cmpSecContent:"Content",cmpSecSchema:"Structured data",
+cmpSecIntl:"Languages",cmpSecTech:"Technical",
+cmpStatus:"HTTP status",cmpTitleLen:"Title",cmpDescLen:"Meta description",
+cmpH1:"H1",cmpH2:"H2",cmpWords:"Words",cmpSchema:"Schema types",cmpFaq:"FAQPage",
+cmpHreflang:"hreflang",cmpXdef:"x-default",cmpCanon:"Self-canonical",
+cmpImgs:"Images with useful alt",cmpLinks:"Internal links",cmpExt:"External links",
+cmpCloak:"Cloaking",cmpCms:"CMS",cmpYes:"yes",cmpNo:"no",cmpNone:"none",
+cmpGapTitle:"Where you are behind",cmpGapNone:"In this comparison you are not behind on any measured metric.",
+cmpGapFaq:"{who} marks its questions up with FAQPage and you do not. It no longer earns rich results in Google, but AI search engines still read it.",
+cmpGapWords:"{who} writes more on this topic: {n} words against your {mine}.",
+cmpGapSchema:"{who} declares more schema types: {n} against your {mine}.",
+cmpGapDesc:"Your meta description {why}.",cmpGapDescNone:"is missing",cmpGapDescLong:"runs past 155 characters and Google will cut it",
+cmpGapTitleLong:"Your title runs past 60 characters and Google will cut it.",
+cmpGapNoH1:"This page has no H1.",
+cmpGapAlt:"{who} describes its images better: {n}% with useful alt against your {mine}%.",
+cmpGapCanon:"Your canonical does not point at this page.",
+cmpGapCloak:"This page serves Googlebot something different from a browser.",
 tbAudit:"Audit page",tbGuide:"Guide",menu:"Menu",theme:"Toggle theme",urlField:"URL to audit",
 h1:"See what Google sees",
 lede:"A full on-page audit of any URL, plus the check almost nobody runs: whether that page serves Google something different from what you see.",
@@ -530,7 +627,8 @@ function applyStatic(){
     n.setAttribute('aria-label',s);
     if(n.tagName==='BUTTON')n.setAttribute('title',s);
   }
-  document.getElementById('tbtitle').textContent=T('tbAudit');
+  document.getElementById('tbtitle').textContent=T(view==='cmp'?'tbCmp':'tbAudit');
+  if(view==='cmp'&&cmpRows)drawCmp(cmpRows);
   if(!go.disabled)go.textContent=T('btnAudit');
   for(const b of document.querySelectorAll('.lang'))b.classList.toggle('on',b.getAttribute('data-lang')===LANG);
   document.title=T('docTitle');
@@ -555,12 +653,17 @@ function focusGuide(){
 let view='audit';
 function showView(v){
   view=v;
-  for(const id of ['auditTop','out']) document.getElementById(id).style.display='';
-  document.querySelector('.pagebar').style.display='';
-  document.getElementById('navAudit').classList.add('on');
-  document.getElementById('tbtitle').textContent=T('tbAudit');
+  const onCmp = v==='cmp';
+  cmpWrap.hidden = !onCmp;
+  for(const id of ['auditTop','out']) document.getElementById(id).style.display = onCmp?'none':'';
+  document.querySelector('.pagebar').style.display = onCmp?'none':'';
+  document.getElementById('navAudit').classList.toggle('on',!onCmp);
+  document.getElementById('navCmp').classList.toggle('on',onCmp);
+  document.getElementById('tbtitle').textContent=T(onCmp?'tbCmp':'tbAudit');
   document.getElementById('side').classList.remove('open');
+  if(onCmp) buildCmp();
 }
+document.getElementById('navCmp').addEventListener('click',()=>showView('cmp'));
 function focusAudit(){
   showView('audit');
   window.scrollTo({top:0,behavior:'smooth'});
@@ -1136,6 +1239,260 @@ askForm.addEventListener('submit',e=>{
   askSend(q);
 });
 
+
+/* ---- Comparador: tu pagina frente a la de la competencia -----------------
+   Reutiliza /api/audit, una llamada por URL. No guarda nada.              */
+
+const cmpWrap = document.getElementById('cmpWrap');
+let cmpRows = null, cmpBusy = false;
+
+function cmpNorm(u){
+  u = (u||'').trim();
+  if(!u) return '';
+  return /^https?:\\/\\//i.test(u) ? u : 'https://' + u;
+}
+function cmpShort(u){
+  try{ const x = new URL(u); return x.hostname.replace(/^www\\./,''); }catch(e){ return u; }
+}
+function cmpPath(u){
+  try{ const x = new URL(u); return (x.pathname==='/'?'/':x.pathname); }catch(e){ return ''; }
+}
+
+function buildCmp(){
+  if(cmpWrap.childElementCount) return;
+  const intro = el('div','cmp-intro');
+  intro.appendChild(el('h2',null,T('cmpTitle')));
+  intro.appendChild(el('p',null,T('cmpLede')));
+  cmpWrap.appendChild(intro);
+
+  const form = el('div','cmp-form');
+  const ta = document.createElement('textarea');
+  ta.id = 'cmpIn'; ta.spellcheck = false; ta.setAttribute('data-tp','cmpPh');
+  ta.placeholder = T('cmpPh');
+  form.appendChild(ta);
+
+  const acts = el('div','cmp-acts');
+  const run = el('button','cmp-run'); run.id='cmpGo'; run.type='button'; run.textContent=T('cmpRun');
+  const langs = el('button','cmp-alt'); langs.id='cmpLangs'; langs.type='button'; langs.textContent=T('cmpLangs');
+  const note = el('span','cmp-note'); note.id='cmpNote';
+  acts.appendChild(run); acts.appendChild(langs); acts.appendChild(note);
+  form.appendChild(acts);
+  cmpWrap.appendChild(form);
+
+  const res = el('div'); res.id='cmpRes';
+  cmpWrap.appendChild(res);
+
+  run.addEventListener('click', runCmp);
+  langs.addEventListener('click', addMyLangs);
+  ta.addEventListener('keydown', e=>{ if(e.key==='Enter' && (e.metaKey||e.ctrlKey)) runCmp(); });
+}
+
+function cmpUrls(){
+  return document.getElementById('cmpIn').value.split('\\n').map(cmpNorm).filter(Boolean);
+}
+function cmpSay(msg){ document.getElementById('cmpNote').textContent = msg||''; }
+
+async function auditOne(url){
+  try{
+    const r = await fetch('/api/audit?url=' + encodeURIComponent(url));
+    const j = await r.json();
+    if(!j.ok) return {url:url, ok:false, error:j.error||T('cmpFailed')};
+    return {url:url, ok:true, d:j};
+  }catch(e){
+    return {url:url, ok:false, error:e.message||T('cmpFailed')};
+  }
+}
+
+async function addMyLangs(){
+  const us = cmpUrls();
+  if(!us.length){ cmpSay(T('cmpNeed')); return; }
+  const b = document.getElementById('cmpLangs');
+  b.disabled = true; cmpSay('');
+  const r = await auditOne(us[0]);
+  b.disabled = false;
+  if(!r.ok){ cmpSay(r.error); return; }
+  const alts = (r.d.page && r.d.page.hreflangs) || [];
+  const hrefs = alts.map(a => typeof a === 'string' ? a : (a.href || a.url || '')).filter(Boolean);
+  const add = hrefs.filter(h => !us.includes(h));
+  if(!add.length){ cmpSay(T('cmpLangNone')); return; }
+  const ta = document.getElementById('cmpIn');
+  ta.value = us.concat(add).slice(0,5).join('\\n');
+  cmpSay('');
+}
+
+async function runCmp(){
+  if(cmpBusy) return;
+  const us = cmpUrls();
+  if(us.length < 2){ cmpSay(T('cmpNeed')); return; }
+  if(us.length > 5){ cmpSay(T('cmpMax')); return; }
+  cmpBusy = true;
+  const b = document.getElementById('cmpGo');
+  b.disabled = true; b.textContent = T('cmpRunning');
+  const res = document.getElementById('cmpRes');
+  res.textContent = '';
+  const rows = [];
+  for(let i=0;i<us.length;i++){
+    cmpSay(T('cmpStep',{n:i+1,t:us.length}));
+    rows.push(await auditOne(us[i]));
+  }
+  cmpSay('');
+  b.disabled = false; b.textContent = T('cmpRun');
+  cmpBusy = false;
+  cmpRows = rows;
+  drawCmp(rows);
+}
+
+function cmpMetrics(r){
+  if(!r.ok) return null;
+  const d = r.d, p = d.page||{}, h = p.headings||{}, im = p.images||{}, lk = p.links||{};
+  const altTotal = im.total||0;
+  const altGood = im.meaningfulAlt||0;
+  return {
+    status: d.status,
+    title: p.title||'', titleLen: p.titleLength||0,
+    descLen: p.descriptionLength||0,
+    h1: h.h1||0, h2: h.h2||0,
+    words: p.wordCount||0,
+    schema: (p.schemaTypes||[]),
+    faq: (p.schemaTypes||[]).indexOf('FAQPage') > -1,
+    hreflang: (p.hreflangs||[]).length, xdef: !!p.hasXDefault,
+    canon: !!p.canonicalSelf,
+    altPct: altTotal ? Math.round(altGood*100/altTotal) : null, altTotal: altTotal,
+    linkInt: lk.internal||0, linkExt: lk.external||0,
+    cloak: !!(d.cloaking && d.cloaking.suspicious),
+    cms: p.cms||''
+  };
+}
+
+function drawCmp(rows){
+  const res = document.getElementById('cmpRes');
+  res.textContent = '';
+  const M = rows.map(cmpMetrics);
+  const mine = M[0];
+  const others = M.slice(1).filter(Boolean);
+
+  const wrap = el('div','cmp-scroll');
+  const t = document.createElement('table'); t.className='cmp';
+  const thead = document.createElement('thead');
+  const hr = document.createElement('tr');
+  const corner = document.createElement('th'); corner.className='lab'; hr.appendChild(corner);
+  rows.forEach((r,i)=>{
+    const th = document.createElement('th');
+    if(i===0) th.className='mine';
+    const n = el('span','cmp-head');
+    n.appendChild(document.createTextNode(cmpShort(r.url) + (i===0 ? ' · ' + T('cmpMine') : '')));
+    const s = document.createElement('small'); s.textContent = cmpPath(r.url);
+    n.appendChild(s);
+    th.appendChild(n);
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr); t.appendChild(thead);
+  const tb = document.createElement('tbody');
+
+  function section(label){
+    const tr = document.createElement('tr'); tr.className='sect';
+    const th = document.createElement('th'); th.colSpan = rows.length+1; th.textContent = label;
+    tr.appendChild(th); tb.appendChild(tr);
+  }
+  function line(label, fn){
+    const tr = document.createElement('tr');
+    const th = document.createElement('th'); th.className='lab'; th.textContent=label; tr.appendChild(th);
+    M.forEach((m,i)=>{
+      const td = document.createElement('td');
+      if(i===0) td.className='mine';
+      if(!m){ td.appendChild(el('span','cmp-b warn', rows[i].error||T('cmpFailed'))); }
+      else { const v = fn(m,i); if(v!=null) td.appendChild(v); }
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+  const txt = s => document.createTextNode(String(s));
+  const pill = (s,k) => el('span','cmp-b '+k, s);
+  const yn = (v,goodWhenTrue) => pill(v?T('cmpYes'):T('cmpNo'), v===!!goodWhenTrue?'win':'lose');
+
+  section(T('cmpSecBasics'));
+  line(T('cmpStatus'), m => m.status===200 ? pill('200','win') : pill(String(m.status),'lose'));
+  line(T('cmpTitleLen'), m => {
+    const f = document.createDocumentFragment();
+    f.appendChild(pill(m.titleLen+'', m.titleLen>60?'warn':(m.titleLen<30?'warn':'win')));
+    const s = el('span','cmp-sub', m.title.slice(0,90)); f.appendChild(s);
+    return f;
+  });
+  line(T('cmpDescLen'), m => pill(m.descLen+'', m.descLen===0?'lose':(m.descLen>155?'warn':'win')));
+  line(T('cmpCms'), m => txt(m.cms||'—'));
+
+  section(T('cmpSecContent'));
+  line(T('cmpH1'), m => pill(m.h1+'', m.h1===1?'win':'lose'));
+  line(T('cmpH2'), m => txt(m.h2));
+  const bestWords = Math.max.apply(null,[0].concat(M.filter(Boolean).map(m=>m.words)));
+  line(T('cmpWords'), m => pill(m.words.toLocaleString(locale()), m.words===bestWords?'win':(m.words < bestWords*0.6?'lose':'neutral')));
+  const bestAlt = Math.max.apply(null,[0].concat(M.filter(Boolean).map(m=>m.altPct==null?0:m.altPct)));
+  line(T('cmpImgs'), m => m.altPct==null ? txt('—') : pill(m.altPct+'%', m.altPct===bestAlt?'win':(m.altPct<50?'lose':'neutral')));
+
+  section(T('cmpSecSchema'));
+  const bestSchema = Math.max.apply(null,[0].concat(M.filter(Boolean).map(m=>m.schema.length)));
+  line(T('cmpSchema'), m => {
+    const f = document.createDocumentFragment();
+    f.appendChild(pill(m.schema.length+'', m.schema.length===bestSchema?'win':'lose'));
+    f.appendChild(el('span','cmp-sub', m.schema.length?m.schema.slice(0,6).join(', '):T('cmpNone')));
+    return f;
+  });
+  line(T('cmpFaq'), m => yn(m.faq,true));
+
+  section(T('cmpSecIntl'));
+  line(T('cmpHreflang'), m => txt(m.hreflang||'—'));
+  line(T('cmpXdef'), m => m.hreflang ? yn(m.xdef,true) : txt('\\u2014'));
+
+  section(T('cmpSecTech'));
+  line(T('cmpCanon'), m => yn(m.canon,true));
+  const bestInt = Math.max.apply(null,[0].concat(M.filter(Boolean).map(m=>m.linkInt)));
+  line(T('cmpLinks'), m => pill(m.linkInt+'', m.linkInt===bestInt?'win':'neutral'));
+  line(T('cmpExt'), m => txt(m.linkExt));
+  line(T('cmpCloak'), m => m.cloak ? pill(T('cmpYes'),'lose') : pill(T('cmpNo'),'win'));
+
+  t.appendChild(tb); wrap.appendChild(t); res.appendChild(wrap);
+
+  /* ---- where you are behind ---- */
+  const gaps = [];
+  if(mine){
+    const whoFaq = rows.slice(1).filter((r,i)=>M[i+1]&&M[i+1].faq).map(r=>cmpShort(r.url));
+    if(!mine.faq && whoFaq.length) gaps.push(T('cmpGapFaq',{who:whoFaq.join(', ')}));
+    const wordy = others.filter(m=>m.words > mine.words*1.25);
+    if(wordy.length){
+      const top = wordy.reduce((a,b)=>a.words>b.words?a:b);
+      const who = cmpShort(rows[M.indexOf(top)].url);
+      gaps.push(T('cmpGapWords',{who:who,n:top.words.toLocaleString(locale()),mine:mine.words.toLocaleString(locale())}));
+    }
+    const rich = others.filter(m=>m.schema.length > mine.schema.length);
+    if(rich.length){
+      const top = rich.reduce((a,b)=>a.schema.length>b.schema.length?a:b);
+      gaps.push(T('cmpGapSchema',{who:cmpShort(rows[M.indexOf(top)].url),n:top.schema.length,mine:mine.schema.length}));
+    }
+    if(mine.descLen===0) gaps.push(T('cmpGapDesc',{why:T('cmpGapDescNone')}));
+    else if(mine.descLen>155) gaps.push(T('cmpGapDesc',{why:T('cmpGapDescLong')}));
+    if(mine.titleLen>60) gaps.push(T('cmpGapTitleLong'));
+    if(mine.h1!==1) gaps.push(T('cmpGapNoH1'));
+    if(mine.altPct!=null){
+      const betterAlt = others.filter(m=>m.altPct!=null && m.altPct > mine.altPct+15);
+      if(betterAlt.length){
+        const top = betterAlt.reduce((a,b)=>a.altPct>b.altPct?a:b);
+        gaps.push(T('cmpGapAlt',{who:cmpShort(rows[M.indexOf(top)].url),n:top.altPct,mine:mine.altPct}));
+      }
+    }
+    if(!mine.canon) gaps.push(T('cmpGapCanon'));
+    if(mine.cloak) gaps.push(T('cmpGapCloak'));
+  }
+  const box = el('div','cmp-gap');
+  box.appendChild(el('h3',null,T('cmpGapTitle')));
+  if(gaps.length){
+    const ul = document.createElement('ul');
+    gaps.forEach(g=>ul.appendChild(el('li',null,g)));
+    box.appendChild(ul);
+  } else {
+    box.appendChild(el('p',null,T('cmpGapNone')));
+  }
+  res.appendChild(box);
+}
 
 const q=new URLSearchParams(location.search).get('url');
 if(q){input.value=q.replace(/^https?:\\/\\//,'');form.dispatchEvent(new Event('submit'));}
